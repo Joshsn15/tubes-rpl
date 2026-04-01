@@ -46,34 +46,12 @@ module.exports = {
             }
         });
 
-        await queryInterface.addColumn('transactions', 'user_id', {
-            type: Sequelize.UUID,
-            defaultValue: Sequelize.UUIDV4,
-            allowNull: false,
-            references: {
-                model: 'users',
-                key: 'user_id'
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
-        })
+        
 
-        await queryInterface.addColumn('transactions', 'customer_id', {
-            type: Sequelize.UUID,
-            defaultValue: Sequelize.UUIDV4,
-            allowNull: false,
-            references: {
-                model: 'customer',
-                key: 'customer_id'
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE'
-        })
+        
     },
 
     async down(queryInterface, Sequelize) {
-        await queryInterface.removeColumn('transactions', 'user_id')
-        await queryInterface.removeColumn('transactions', 'customer_id')
         await queryInterface.dropTable('transactions');
     }
 }

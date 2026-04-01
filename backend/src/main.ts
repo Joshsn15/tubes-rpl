@@ -1,7 +1,6 @@
 import express from "express";
 import { appConfig } from "./Models/appConfig";
 import { Sequelize } from "sequelize-typescript";
-import { Customer } from "./Models/Customer";
 import { StockLogs } from "./Models/StockLogs";
 import { PurchaseOrderItems } from "./Models/PurchaseOrderItems";
 import { PurchaseOrders } from "./Models/PurchaseOrders";
@@ -21,7 +20,7 @@ const sequelize = new Sequelize({
     database : appConfig.database.database, 
     port : appConfig.database.port,
     dialect : appConfig.database.dialect,
-    models : [Customer, Suppliers, Products, Transactions, TransactionItems, PurchaseOrders, PurchaseOrderItems, StockLogs  ]    
+    models : [Suppliers, Products, Transactions, TransactionItems, PurchaseOrders, PurchaseOrderItems, StockLogs  ]    
 }
 )
 sequelize
