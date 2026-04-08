@@ -6,7 +6,7 @@ import { PurchaseOrderItems } from "./Models/PurchaseOrderItems";
 import { PurchaseOrders } from "./Models/PurchaseOrders";
 import { TransactionItems } from "./Models/TransactionItems";
 import { Transactions } from "./Models/Transactions";
-import { Products } from "./Models/Products";
+import { Products } from "./models/Products";
 import { Suppliers } from "./Models/Suppliers";
 
 

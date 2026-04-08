@@ -3,7 +3,8 @@ import {
   Column,
   Model,
   DataType,
-  PrimaryKey
+  PrimaryKey,
+  CreatedAt, UpdatedAt, DeletedAt
 } from "sequelize-typescript";
 
 @Table({
