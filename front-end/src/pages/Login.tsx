@@ -1,9 +1,19 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { isEmail } from "../utils/isEmail";
 
-const Login = () => {
+    import { useState } from "react";
+    import { useNavigate, Link } from "react-router-dom";
+    import { isEmail } from "../utils/isEmail";
+    import logo from "../images/lokanata_logo.jpeg";
 
+    import {
+    Box,
+    Card,
+    CardContent,
+    TextField,
+    Button,
+    Typography
+    } from "@mui/material";
+
+    const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -13,111 +23,99 @@ const Login = () => {
         e.preventDefault();
 
         if (!isEmail(email)) {
-            alert("Email is invalid");
-            return;
+        alert("Email is invalid");
+        return;
         }
 
         if (password.length < 6) {
-            alert("Password must be at least 6 characters");
-            return;
+        alert("Password must be at least 6 characters");
+        return;
         }
 
+        try {
         const response = await fetch("http://localhost:3000/api/login", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+            "Content-Type": "application/json"
             },
             body: JSON.stringify({ email, password })
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
-            const data = await response.json();
-            alert("Login error: " + data);
+            alert("Login error: " + (data.message || "Unknown error"));
             return;
         }
 
         nav("/");
+        } catch {
+        alert("Server error");
+        }
     };
 
     return (
-        <div style={{
+        <Box
+        sx={{
             height: "100vh",
             display: "flex",
             justifyContent: "center",
-            alignItems: "center"
-        }}>
-            <div>
-                <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: "16px",
-                    padding: "40px",
-                    borderRadius: "16px",
-                    background: "rgba(135, 7, 7, 0.12)",
-                    backdropFilter: "blur(12px)",
-                }}>
-                <h1>LOGIN</h1>
-                <form style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "16px",
-                    padding: "40px",
-                    width: "320px",
-                    borderRadius: "16px",
-                    background: "white",
-                    boxShadow: "0 10px 25px rgba(0,0,0,0.08)"
-                }} onSubmit={handleLogin}>
-                    <input style={{
-                        padding: "12px",
-                            borderRadius: "8px",
-                            border: "1px solid #bcd2ff",
-                            fontSize: "14px",
-                            background: "#e8f0ff"
+            alignItems: "center",
+            bgcolor: "background.default"
+        }}
+        >
+        <Card sx={{ width: 360, p: 2 }}>
+            <CardContent>
+                <img src={logo} alt="Logo" style={{ width: "100px", margin: "0 auto 16px", display: "block" }} />
+            <Typography variant="h5" textAlign="center" mb={2}>
+                LOGIN
+            </Typography>
+
+            <Box
+                component="form"
+                onSubmit={handleLogin}
+                sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+            >
+                <TextField
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                variant="outlined"
+                />
+
+                <TextField
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                variant="outlined"
+                />
+
+                <Button type="submit" fullWidth>
+                Login
+                </Button>
+
+                <Typography textAlign="center" fontSize={14}>
+                Don't have an account?{" "}
+                <Link
+                    to="/register"
+                    style={{
+                    color: "#C17F4A",
+                    textDecoration: "none",
+                    fontWeight: "bold"
                     }}
-                        type="email"
-                        placeholder="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-
-                    <input style={{
-                        padding: "12px",
-                            borderRadius: "8px",
-                            border: "1px solid #bcd2ff",
-                            fontSize: "14px",
-                            background: "#e8f0ff"
-                    }}
-                        type="password"
-                        placeholder="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-
-                    <button type="submit">Login</button>
-                    <p style={{
-                        textAlign: "center",
-                        fontSize: "14px",
-                        marginTop: "8px"
-                    }}>
-                        Don't have an account?{" "}
-                        {/* <Link
-                            to="/register"
-                            style={{
-                                color: "#2f6fed",
-                                textDecoration: "none",
-                                fontWeight: "bold"
-                            }}
-                        > */}
-                            Register here
-                        {/* </Link> */}
-                    </p>
-                </form>
-                </div>
-            </div>
-
-        </div>
+                >
+                    Register here
+                </Link>
+                </Typography>
+            </Box>
+            </CardContent>
+        </Card>
+        </Box>
     );
-};
+    };
 
-export default Login;
+    export default Login;
