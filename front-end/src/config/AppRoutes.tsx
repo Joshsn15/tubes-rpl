@@ -4,13 +4,8 @@ import RoleLayout from "../layouts/RoleLayout";
 import ManagerDashboard from "../pages/ManagerPage/ManagerDashboard";
 import EditProducts from "../pages/ManagerPage/EditProducts";
 import { earthTheme } from "../themes/themes";
+import FinancialReports from "../pages/ManagerPage/FinancialReports";
 
-// ── Placeholder pages for other roles ─────────────────────────────────────
-const Placeholder = ({ title }: { title: string }) => (
-    <div style={{ padding: 32, color: "#666", fontFamily: "monospace" }}>
-        [{title}] — page coming soon
-    </div>
-);
 
 
 // ── App ────────────────────────────────────────────────────────────────────
@@ -23,7 +18,7 @@ export default function AppRoutes() {
                 {/* ── MANAGER ── */}
                 <Route element={<RoleLayout role="manager" />}>
                     <Route path="/manager" element={<ManagerDashboard />} />
-                    <Route path="/manager/financialReports" element={<Placeholder title="Manager / financial Reports" />} />
+                    <Route path="/manager/financialReports" element={<FinancialReports />} />
                     <Route path="/manager/edit/:id" element={<EditProducts />} />
                 </Route>
 

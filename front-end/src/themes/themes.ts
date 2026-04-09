@@ -11,7 +11,7 @@ export const earthTheme = createTheme({
         secondary: { main: "#8A7060", contrastText: "#1C1410" }, // warm taupe
         error: { main: "#8B4A3A" },                           // brick merah tua
         warning: { main: "#A8A86A", contrastText: "#1C1410" }, // sage olive
-        info: { main: "#6A9A9A", contrastText: "#1C1410" }, // warm slate (bukan biru!)
+        info: { main: "#6A9A9A", contrastText: "#1C1410" }, // warm slate 
         success: { main: "#C17F4A" },
         text: {
             primary: "#E8D5BB",  // krim — teks utama
