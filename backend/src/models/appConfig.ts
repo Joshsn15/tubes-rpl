@@ -5,7 +5,7 @@ const pe = process.env
 export const appConfig = {
     database: {
         username: pe.DB_USERNAME ?? "postgres",
-        password: pe.DB_PASSWORD ?? "120506",
+        password: pe.DB_PASSWORD ?? "Elly9394",
         host: pe.DB_HOST ?? "localhost",
         database: pe.DB_NAME ?? "tubes_rpl_minimarket",
         port: parseInt(pe.DB_PORT ?? "5432"),   // tambah ini

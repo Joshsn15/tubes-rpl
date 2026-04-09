@@ -5,6 +5,11 @@ import ManagerDashboard from "../pages/ManagerPage/ManagerDashboard";
 import EditProducts from "../pages/ManagerPage/EditProducts";
 import { earthTheme } from "../themes/themes";
 import FinancialReports from "../pages/ManagerPage/FinancialReports";
+import { lazy } from "react";
+
+const Register = lazy(() => import("../pages/Register"));
+const MainMenu = lazy(() => import("../pages/MainMenu"));
+const Login = lazy(() => import("../pages/Login"));
 
 
 
@@ -28,9 +33,12 @@ export default function AppRoutes() {
                 </Route>
 
                 {/* ── EMPLOYEE ── */}
-                <Route element={<RoleLayout role="employee" />}>
-                    {/* disinii pathnya */}
+                <Route>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/" element={<MainMenu />} />
                 </Route>
+
 
                 {/* ── STOCKER ── */}
                 <Route element={<RoleLayout role="stocker" />}>

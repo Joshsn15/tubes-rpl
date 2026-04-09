@@ -6,8 +6,10 @@ import AppRoutes from './config/AppRoutes'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <ThemeProvider theme={earthTheme}>
     <BrowserRouter>
       <AppRoutes />
     </BrowserRouter>
+    </ThemeProvider>
   </StrictMode>,
 )
