@@ -13,33 +13,33 @@ export class Users extends Model {
         defaultValue: DataType.UUIDV4,
         allowNull: false,
     })
-    user_id!: string;
+    declare user_id: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         unique: true,
     })
-    username!: string;
+    declare username: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         unique: true,
     })
-    email!: string;
+    declare email: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
     })
-    password!: string;
+    declare password: string;
 
     @Column({
         type: DataType.ENUM('ADMIN', 'MANAGER', 'STOCKER', 'EMPLOYEE'),
         allowNull: false,
     })
-    role!: 'ADMIN' | 'MANAGER' | 'STOCKER' | 'EMPLOYEE';
+    declare role: 'ADMIN' | 'MANAGER' | 'STOCKER' | 'EMPLOYEE';
 
     @CreatedAt
     declare createdAt: Date;

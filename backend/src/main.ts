@@ -1,27 +1,66 @@
 import express from "express";
-import { appConfig } from "./Models/appConfig";
 import { Sequelize } from "sequelize-typescript";
-import { StockLogs } from "./Models/StockLogs";
-import { PurchaseOrderItems } from "./Models/PurchaseOrderItems";
-import { PurchaseOrders } from "./Models/PurchaseOrders";
-import { TransactionItems } from "./Models/TransactionItems";
-import { Transactions } from "./Models/Transactions";
-import { Products } from "./Models/Products";
-import { Suppliers } from "./Models/Suppliers";
 
+import { appConfig } from "./models/appConfig";
+
+// MODELS
+import { Users } from "./models/Users";
+import { Suppliers } from "./models/Suppliers";
+import { Products } from "./models/Products";
+import { Transactions } from "./models/Transactions";
+import { TransactionItems } from "./models/TransactionItems";
+import { PurchaseOrders } from "./models/PurchaseOrders";
+import { PurchaseOrderItems } from "./models/PurchaseOrderItems";
+import { StockLogs } from "./models/StockLogs";
+
+// ROUTES
+import registerRoute from "./routes/registerRoutes";
+import loginRoute from "./routes/loginRoutes";
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
+// 🔥 INIT SEQUELIZE FIRST
 const sequelize = new Sequelize({
-    username : appConfig.database.username,
-    password : appConfig.database.password,
-    host : appConfig.database.host,
-    database : appConfig.database.database, 
-    port : appConfig.database.port,
-    dialect : appConfig.database.dialect,
-    models : [Suppliers, Products, Transactions, TransactionItems, PurchaseOrders, PurchaseOrderItems, StockLogs  ]    
-}
-)
-sequelize
+  username: appConfig.database.username,
+  password: appConfig.database.password,
+  host: appConfig.database.host,
+  database: appConfig.database.database,
+  port: appConfig.database.port,
+  dialect: appConfig.database.dialect,
+  models: [
+    Users,
+    Suppliers,
+    Products,
+    Transactions,
+    TransactionItems,
+    PurchaseOrders,
+    PurchaseOrderItems,
+    StockLogs
+  ]
+});
 
+// 🔥 WAIT FOR DB BEFORE USING ROUTES
+sequelize.authenticate()
+  .then(() => {
+    console.log("DB CONNECTED ✅");
+
+    // OPTIONAL BUT GOOD
+    return sequelize.sync();
+  })
+  .then(() => {
+    console.log("DB SYNCED ✅");
+
+    // ✅ NOW register routes
+    app.use("/api", registerRoute);
+    app.use("/api", loginRoute);
+
+    // ✅ THEN start server
+    app.listen(3000, () => {
+      console.log("Server running on port 3000");
+    });
+  })
+  .catch((err) => {
+    console.error("DB ERROR ❌", err);
+  });

@@ -33,7 +33,7 @@ export class Products extends Model {
         type: DataType.DECIMAL(12,2),
         allowNull: false,
     })
-    price!: string;
+    price!: number;
 
     @Column({
         type: DataType.INTEGER,
