@@ -3,6 +3,7 @@ import { Products } from '../models/Products';
 import { StockLogs } from '../models/StockLogs';
 import { sequelize } from "../../config/database";
 import { Ledger } from '../models/Ledger';
+import { StockReports } from '../models/StockReports';
 
 export class stockControllers {
     static async getStock(req: Request, res: Response) {
@@ -19,6 +20,58 @@ export class stockControllers {
         }
     }
 
+    static async getReports(req: Request, res: Response) {
+        try {
+            const reports = await StockReports.findAll({
+                include: [Products],
+                order: [["createdAt", "DESC"]]
+            });
+
+            res.json({ data: reports });
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: "Error fetching reports" });
+        }
+    }
+
+    static async createReport(req: Request, res: Response) {
+        try {
+            const { products_id, actual_stock } = req.body;
+
+            console.log("BODY:", req.body);
+
+            const product = await Products.findByPk(products_id);
+            if (!product) {
+                return res.status(404).json({ message: "Product not found" });
+            }
+
+            const actualStockNum = Number(actual_stock);
+
+            if (isNaN(actualStockNum)) {
+                return res.status(400).json({ message: "actual_stock must be number" });
+            }
+
+            const systemStock = Number(product.getDataValue("stock"));
+
+            const difference = actualStockNum - systemStock;
+
+            const report = await StockReports.create({
+                products_id,
+                system_stock: systemStock,
+                actual_stock: actualStockNum,
+                difference,
+                status: "PENDING"
+            });
+
+            res.json({ success: true, data: report });
+
+        } catch (error) {
+            console.error("🔥 CREATE REPORT ERROR:", error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    }
+
     static async receival(req: Request, res: Response) {
         const t = await sequelize.transaction();
 
@@ -26,46 +79,65 @@ export class stockControllers {
             const { items } = req.body;
 
             for (const item of items) {
-                const product = await Products.findByPk(item.product_id);
+                console.log("ITEM:", item);
+
+                const product = await Products.findByPk(item.products_id);
 
                 if (!product) throw new Error("Product not found");
 
-                // tambah stock
-                product.stock += item.qty;
+                console.log("PRODUCT:", product.toJSON());
+
+                const currentStock = Number(product.getDataValue("stock") || 0);
+                const qty = Number(item.qty || 0);
+                const price = Number(product.getDataValue("price") || 0);
+
+                // ✅ update stock
+                product.setDataValue("stock", currentStock + qty);
                 await product.save({ transaction: t });
 
-                // insert stock log
+                console.log("STOCK UPDATED");
+
+                // ✅ stock log
                 await StockLogs.create({
-                    product_id: item.product_id,
+                    products_id: item.products_id,
                     change_type: "IN",
-                    stock_qty: item.qty,
-                    reference_type: "PURCHASE"
+                    stock_qty: qty,
+                    reference_type: "PURCHASE",
+                    reference_id: 1 // sementara
                 }, { transaction: t });
 
-                // insert ledger (expense)
+                console.log("STOCK LOG CREATED");
+
+                // ❗ sementara MATIIN ledger dulu
+                // biar kita tau errornya dari mana
+                /*
                 await Ledger.create({
-                    reference_type: "PURCHASE",
-                    reference_id: item.product_id,
-                    debit: item.qty * product.price,
-                    credit: 0
+                  reference_type: "PURCHASE",
+                  reference_id: 1,
+                  debit: qty * price,
+                  credit: 0
                 }, { transaction: t });
+                */
+
+                console.log("DONE ITEM");
             }
 
             await t.commit();
 
-            res.json({ success: true, message: "Stock updated" });
+            res.json({ success: true });
 
-        } catch (error) {
+        } catch (error: any) {
+            console.error("🔥 RECEIVAL ERROR FULL:", error);
             await t.rollback();
-            res.status(500).json({ message: error });
+            res.status(500).json({ message: error.message });
         }
     }
 
     static async reportDifference(req: Request, res: Response) {
         try {
-            const { product_id, actual_stock } = req.body;
+            const { products_id, actual_stock } = req.body;
 
-            const product = await Products.findByPk(product_id);
+            const product = await Products.findByPk(products_id);
             if (!product) throw new Error("Product not found");
 
             const difference = actual_stock - product.stock;
@@ -82,38 +154,45 @@ export class stockControllers {
         }
     }
 
-    static async approveAdjustment(req: Request, res: Response) {
+    static async approveReport(req: Request, res: Response) {
         const t = await sequelize.transaction();
 
         try {
-            const { product_id, actual_stock } = req.body;
+            const { report_id } = req.body;
 
-            const product = await Products.findByPk(product_id);
+            const report = await StockReports.findByPk(report_id);
+            if (!report) throw new Error("Report not found");
+
+            const product = await Products.findByPk(report.products_id);
             if (!product) throw new Error("Product not found");
 
-            const diff = actual_stock - product.stock;
+            const diff = report.difference;
 
-            // update stock
-            product.stock = actual_stock;
+            // 🔥 update stock
+            product.stock += diff;
             await product.save({ transaction: t });
 
-            // stock log
+            // 🔥 stock log
             await StockLogs.create({
-                product_id,
+                products_id: report.products_id,
                 change_type: "ADJUST",
                 stock_qty: diff,
                 reference_type: "MANUAL"
             }, { transaction: t });
 
-            // ledger (kalau rugi)
+            // 🔥 ledger
             if (diff < 0) {
                 await Ledger.create({
                     reference_type: "ADJUST",
-                    reference_id: product_id,
+                    reference_id: report.products_id,
                     debit: 0,
                     credit: Math.abs(diff) * product.price
                 }, { transaction: t });
             }
+
+            // 🔥 update status
+            report.status = "APPROVED";
+            await report.save({ transaction: t });
 
             await t.commit();
 
@@ -121,6 +200,7 @@ export class stockControllers {
 
         } catch (error) {
             await t.rollback();
+            console.error(error);
             res.status(500).json({ message: error });
         }
     }
