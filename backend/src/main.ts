@@ -1,12 +1,12 @@
 import express from "express";
 import { Sequelize } from "sequelize-typescript";
-
+import cors from 'cors';
 import { appConfig } from "./models/appConfig";
 
 // MODELS
 import { Users } from "./models/Users";
 import { Suppliers } from "./models/Suppliers";
-import { Products } from "./models/Products";
+import { Products } from "./models/products";
 import { Transactions } from "./models/Transactions";
 import { TransactionItems } from "./models/TransactionItems";
 import { PurchaseOrders } from "./models/PurchaseOrders";
