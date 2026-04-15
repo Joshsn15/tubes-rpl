@@ -12,7 +12,7 @@ import {
 } from "sequelize-typescript";
 
 import { Products } from "./Products.js";
-import { Transactions } from "./Transactions";
+import { Transactions } from "./Transactions.js";
 @Table({
   tableName: "transaction_items",
   timestamps: true,

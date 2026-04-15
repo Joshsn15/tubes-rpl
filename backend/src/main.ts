@@ -1,17 +1,17 @@
 import express from "express";
 import { Sequelize } from "sequelize-typescript";
 
-import { appConfig } from "./Models/appConfig";
+import { appConfig } from "./models/appConfig";
 
 // MODELS
-import { Users } from "./Models/Users";
-import { Suppliers } from "./Models/Suppliers";
-import { Products } from "./Models/Products";
-import { Transactions } from "./Models/Transactions";
-import { TransactionItems } from "./Models/TransactionItems";
-import { PurchaseOrders } from "./Models/PurchaseOrders";
-import { PurchaseOrderItems } from "./Models/PurchaseOrderItems";
-import { StockLogs } from "./Models/StockLogs";
+import { Users } from "./models/Users";
+import { Suppliers } from "./models/Suppliers";
+import { Products } from "./models/Products";
+import { Transactions } from "./models/Transactions";
+import { TransactionItems } from "./models/TransactionItems";
+import { PurchaseOrders } from "./models/PurchaseOrders";
+import { PurchaseOrderItems } from "./models/PurchaseOrderItems";
+import { StockLogs } from "./models/StockLogs";
 
 // ROUTES
 import registerRoute from "./routes/registerRoutes";
