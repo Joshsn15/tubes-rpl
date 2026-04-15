@@ -1,6 +1,5 @@
 import express from "express";
 import { Sequelize } from "sequelize-typescript";
-import cors from "cors";
 
 import { appConfig } from "./Models/appConfig";
 
