@@ -5,6 +5,7 @@ import ManagerDashboard from "../pages/ManagerPage/ManagerDashboard";
 import EditProducts from "../pages/ManagerPage/EditProducts";
 import { earthTheme } from "../themes/themes";
 import FinancialReports from "../pages/ManagerPage/FinancialReports";
+import ApprovalPage from "../pages/ManagerPage/ApprovalPage";
 
 
 
@@ -20,6 +21,7 @@ export default function AppRoutes() {
                     <Route path="/manager" element={<ManagerDashboard />} />
                     <Route path="/manager/financialReports" element={<FinancialReports />} />
                     <Route path="/manager/edit/:id" element={<EditProducts />} />
+                    <Route path="/manager/approval" element={<ApprovalPage />} />
                 </Route>
 
                 {/* ── ADMIN ── */}

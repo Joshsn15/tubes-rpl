@@ -148,8 +148,8 @@ export default function ManagerDashboard() {
                         sx={{ bgcolor: meta.bg, color: meta.color, fontSize: 10, height: 20, border: `1px solid ${alpha(meta.color, 0.2)}`, "& .MuiChip-icon": { fontSize: 12 } }}
                       />
                     </TableCell>
-                    <TableCell><Typography sx={{ fontSize: 11, color: "#555", textTransform: "uppercase", letterSpacing: 0.5 }}>{p.category === "FOOD" ? "TRADING IND" : p.category}</Typography></TableCell>
-                    <TableCell><Typography sx={{ fontSize: 11, color: "#555" }}>{fmtDate(p.expiry_date)}</Typography></TableCell>
+                    <TableCell><Typography sx={{ fontSize: 11, color: "#aaa", textTransform: "uppercase", letterSpacing: 0.5 }}>{p.category === "FOOD" ? "TRADING IND" : p.category}</Typography></TableCell>
+                    <TableCell><Typography sx={{ fontSize: 11, color: "#aaa" }}>{fmtDate(p.expiry_date)}</Typography></TableCell>
                     <TableCell>
                       <Button variant="contained" size="small" sx={{ fontSize: 11, textTransform: "none" }} onClick={() => handleNavigate(`/manager/edit/${p.products_id}`)}>Edit</Button>
                     </TableCell>
