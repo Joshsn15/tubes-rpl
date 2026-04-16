@@ -14,16 +14,19 @@ import { PurchaseOrders } from "./Models/PurchaseOrders";
 import { PurchaseOrderItems } from "./Models/PurchaseOrderItems";
 import { StockLogs } from "./Models/StockLogs";
 
+
 // ROUTES
 import registerRoute from "./routes/registerRoutes";
 import loginRoute from "./routes/loginRoutes";
+import posRoutes from "./routes/pos.routes";
+import productRoutes from "./routes/product.routes";
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 // 🔥 INIT SEQUELIZE FIRST
-const sequelize = new Sequelize({
+export const sequelize = new Sequelize({
   username: appConfig.database.username,
   password: appConfig.database.password,
   host: appConfig.database.host,
@@ -53,9 +56,13 @@ sequelize.authenticate()
   .then(() => {
     console.log("DB SYNCED ✅");
 
+    console.log("REGISTERING ROUTES 🔥");
+
     // ✅ NOW register routes
     app.use("/api", registerRoute);
     app.use("/api", loginRoute);
+    app.use("/api", posRoutes);
+    app.use("/api/products", productRoutes);
 
     // ✅ THEN start server
     app.listen(3000, () => {
