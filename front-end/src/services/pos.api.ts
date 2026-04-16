@@ -1,9 +1,8 @@
-const API = "http://localhost:3000";
 import type { CartItem } from "../types/pos";
 
 // 🧾 get products
 export const getProducts = async () => {
-  const res = await fetch(`${API}/products`);
+  const res = await fetch(`http://localhost:3000/api/products`);
 
   if (!res.ok) throw new Error("Failed to fetch products");
 
@@ -12,7 +11,7 @@ export const getProducts = async () => {
 
 // 💸 checkout
 export const checkout = async (cart: CartItem[]) => {
-  const res = await fetch(`${API}/pos/checkout`, {
+  const res = await fetch(`http://localhost:3000/products/checkout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
