@@ -88,7 +88,7 @@ export default function ManagerDashboard() {
 
       {/* Stocks Table Header */}
       <Box sx={{ display: "flex", alignItems: "center", mb: 1.5 }}>
-        <Typography sx={{ fontSize: 13, fontWeight: 700, letterSpacing: 0.5, color: "#ccc" }}>
+        <Typography sx={{ fontSize: 13, fontWeight: 700, letterSpacing: 0.5, color: "#000" }}>
           Stocks
         </Typography>
         <Box sx={{ flex: 1 }} />
@@ -110,7 +110,7 @@ export default function ManagerDashboard() {
         sx={{
           mb: 1.5,
           "& .MuiTab-root": { fontSize: 11, textTransform: "none", letterSpacing: 0.5, color: "#555", py: 0 },
-          "& .Mui-selected": { color: "#f0f0f0 !important" },
+          "& .Mui-selected": { color: "#000 !important" },
           "& .MuiTabs-indicator": { bgcolor: "#00e676", height: 1.5 },
         }}
       >
@@ -136,7 +136,7 @@ export default function ManagerDashboard() {
               {filtered.map((p) => {
                 const meta = CATEGORY_META[p.category];
                 return (
-                  <TableRow key={p.products_id} sx={{ cursor: "pointer", transition: "background 0.15s", "&:hover": { bgcolor: "#1e1e1e" } }}>
+                  <TableRow key={p.products_id} sx={{ cursor: "pointer", transition: "background 0.15s", "&:hover": { bgcolor: "#6B4A3A" } }}>
                     <TableCell><Typography sx={{ fontSize: 12, fontWeight: 600 }}>{p.products_name}</Typography></TableCell>
                     <TableCell><Typography sx={{ fontSize: 12, color: "#aaa" }}>{fmt(p.price)}</Typography></TableCell>
                     <TableCell><Typography sx={{ fontSize: 12, color: "#aaa" }}>{p.stock.toLocaleString("id-ID")}</Typography></TableCell>

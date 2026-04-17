@@ -1,7 +1,9 @@
 import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
+import { useNavigate } from "react-router";
 import { Outlet } from "react-router-dom";
 
 const MainMenu = () => {
+  const nav = useNavigate();
     return (
         <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
 

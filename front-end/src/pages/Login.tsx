@@ -67,7 +67,7 @@
         <Card sx={{ width: 360, p: 2 }}>
             <CardContent>
                 <img src={logo} alt="Logo" style={{ width: "100px", margin: "0 auto 16px", display: "block" }} />
-            <Typography variant="h5" textAlign="center" mb={2}>
+            <Typography sx={{variant:"h5",textAlign:"center",mb:2}}>
                 LOGIN
             </Typography>
 
@@ -98,7 +98,7 @@
                 Login
                 </Button>
 
-                <Typography textAlign="center" fontSize={14}>
+                <Typography sx={{textAlign:"center",fontSize:"14"}}>
                 Don't have an account?{" "}
                 <Link
                     to="/register"

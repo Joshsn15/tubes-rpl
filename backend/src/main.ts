@@ -6,7 +6,7 @@ import { appConfig } from "./models/appConfig";
 // MODELS
 import { Users } from "./models/Users";
 import { Suppliers } from "./models/Suppliers";
-import { Products } from "./models/products";
+import { Products } from "./models/Products";
 import { Transactions } from "./models/Transactions";
 import { TransactionItems } from "./models/TransactionItems";
 import { PurchaseOrders } from "./models/PurchaseOrders";

@@ -80,7 +80,7 @@ const Register = () => {
             style={{ width: "100px", margin: "0 auto 16px", display: "block" }}
           />
 
-          <Typography variant="h5" textAlign="center" mb={2}>
+          <Typography sx={{variant:"h5",textAlign:"center",mb:2}}>
             REGISTER
           </Typography>
 
@@ -122,7 +122,7 @@ const Register = () => {
               Register
             </Button>
 
-            <Typography textAlign="center" fontSize={14}>
+            <Typography sx={{textAlign:"center" ,fontSize:"14"}}>
               Already have an account?{" "}
               <Link
                 to="/login"
