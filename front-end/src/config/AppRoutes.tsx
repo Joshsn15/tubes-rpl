@@ -6,11 +6,10 @@ const Register = lazy(() => import("../pages/Register"));
 const MainMenu = lazy(() => import("../pages/MainMenu"));
 const Login = lazy(() => import("../pages/Login"));
 const POS = lazy(() => import("../pages/POS"));
+const ProductManagement = lazy(() => import("../pages/ProductManagement"));
 
 export default function AppRoutes() {
   const { isLoading, user } = useAppSelector(state => state.auth);
-  const auth = useAppSelector(state => state.auth);
-console.log("AUTH STATE:", auth);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -19,32 +18,35 @@ console.log("AUTH STATE:", auth);
   return (
     <Suspense fallback={<div>Loading page...</div>}>
       <Routes>
-        {/* public route */}
+        {/* PUBLIC */}
         <Route
           path="/login"
-          element={!user ? <Login /> : <Navigate to="/" />}
+          element={!user ? <Login /> : <Navigate to="/pos" />}
         />
 
         <Route
           path="/register"
-          element={!user ? <Register /> : <Navigate to="/" />}
+          element={!user ? <Register /> : <Navigate to="/pos" />}
         />
 
-        {/* protected routes */}
+        {/* 🔥 PROTECTED LAYOUT */}
         <Route
           path="/"
           element={user ? <MainMenu /> : <Navigate to="/login" />}
-        />
+        >
+          {/* default page */}
+          <Route index element={<Navigate to="pos" />} />
 
-        <Route
-          path="/pos"
-          element={user ? <POS /> : <Navigate to="/login" />}
-        />
+          {/* POS inside MainMenu */}
+          <Route path="pos" element={<POS />} />
+          <Route path="products" element={<ProductManagement />} />
+
+        </Route>
 
         {/* fallback */}
         <Route
           path="*"
-          element={<Navigate to={user ? "/" : "/login"} />}
+          element={<Navigate to={user ? "/pos" : "/login"} />}
         />
       </Routes>
     </Suspense>

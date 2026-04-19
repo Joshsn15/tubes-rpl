@@ -30,3 +30,23 @@ export const checkout = async (cart: CartItem[]) => {
 
   return data;
 };
+
+//Product Price Management
+export const updateProductPrice = async (
+  id: string,
+  price: number,
+  token: string
+) => {
+  const res = await fetch(`http://localhost:3000/api/products/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ price })
+  });
+
+  if (!res.ok) throw new Error("Failed to update");
+
+  return res.json();
+};
