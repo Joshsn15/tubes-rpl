@@ -1,8 +1,7 @@
 import express from "express";
 import { Sequelize } from "sequelize-typescript";
-import cors from 'cors';
 import { appConfig } from "./models/appConfig";
-
+import cors from "cors"
 // MODELS
 import { Users } from "./models/Users";
 import { Suppliers } from "./models/Suppliers";
@@ -22,8 +21,7 @@ import ledgerRoute from "./routes/ledgerRoutes";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
-
+app.use(cors())
 const sequelize = new Sequelize({
   username: appConfig.database.username,
   password: appConfig.database.password,

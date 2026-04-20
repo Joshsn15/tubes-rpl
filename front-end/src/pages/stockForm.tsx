@@ -100,8 +100,7 @@ export default function stockForm() {
     >
       <Typography
         variant="h5"
-        mb={3}
-        sx={{ color: "#513229", fontWeight: 700 }}
+        sx={{ color: "#513229", fontWeight: 700 ,mb:3}}
       >
         Laporan Selisih Stock
       </Typography>
@@ -167,8 +166,7 @@ export default function stockForm() {
       {/* LIST */}
       <Typography
         variant="h6"
-        mb={2}
-        sx={{ color: "#513229", fontWeight: 600 }}
+        sx={{ color: "#513229", fontWeight: 600 ,mb:2 }}
       >
         Daftar Laporan
       </Typography>
@@ -190,7 +188,7 @@ export default function stockForm() {
           }}
         >
           <CardContent>
-            <Typography fontWeight="bold" sx={{ color: "#513229" }}>
+            <Typography  sx={{ color: "#513229" ,fontWeight:"bold"}}>
               {r.product?.products_name}
             </Typography>
 
@@ -199,15 +197,15 @@ export default function stockForm() {
             </Typography>
 
             <Typography
-              fontWeight="bold"
               sx={{
-                color: r.difference < 0 ? "#E53935" : "#2E7D32"
+                color: r.difference < 0 ? "#E53935" : "#2E7D32",
+              fontWeight:"bold"
               }}
             >
               Selisih: {r.difference}
             </Typography>
 
-            <Box mt={1}>
+            <Box sx={{mt:1}}>
               <Chip
                 label={r.status}
                 sx={{

@@ -23,11 +23,20 @@ export default function StockPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("ALL");
 
-  useEffect(() => {
-    fetch("http://localhost:3000/stock")
-      .then(res => res.json())
-      .then(data => setProducts(data.data));
-  }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch("http://localhost:3000/api/stock");
+                const data = await res.json();
+                setProducts(data.data);
+                console.log(data.data)
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchData();
+    }, []);
 
   const filtered = products.filter((p) => {
     const matchSearch = p.products_name

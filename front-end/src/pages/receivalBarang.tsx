@@ -20,11 +20,18 @@ export default function ReceivalBarang() {
     const [selected, setSelected] = useState("");
     const [qty, setQty] = useState<number | "">("");
 
-    // fetch products
     useEffect(() => {
-        fetch("http://localhost:3000/stock")
-            .then(res => res.json())
-            .then(data => setProducts(data.data));
+        const fetchData = async () => {
+            try {
+                const res = await fetch("http://localhost:3000/api/stock");
+                const data = await res.json();
+                setProducts(data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        fetchData();
     }, []);
 
     const handleSubmit = async () => {
@@ -38,7 +45,7 @@ export default function ReceivalBarang() {
             return;
         }
 
-        await fetch("http://localhost:3000/stock/receival", {
+        await fetch("http://localhost:3000/api/stock/receival", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -78,7 +85,7 @@ export default function ReceivalBarang() {
                         color: "#513229",
                         fontWeight: 700,
                         textAlign: "center",
-                        mb: 3 
+                        mb: 3
                     }}
                 >
                     Receival Barang
