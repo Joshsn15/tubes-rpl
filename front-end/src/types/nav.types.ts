@@ -10,6 +10,7 @@ export const NAV_CONFIG: Record<Role, NavItem[]> = {
     { label: "Dashboard", path: "/manager" },
     { label: "Financial Reports", path: "/manager/FinancialReports" },
     { label: "Item Minus Approval", path: "/manager/approval" },
+    { label: "Add New Product", path: "/manager/add-product" },
   ],
   admin: [
     // { label: "Label nama yang ada di nav", path: "tujuan path" },

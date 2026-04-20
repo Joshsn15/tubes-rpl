@@ -21,7 +21,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// 🔥 INIT SEQUELIZE FIRST
 const sequelize = new Sequelize({
   username: appConfig.database.username,
   password: appConfig.database.password,
@@ -41,12 +40,10 @@ const sequelize = new Sequelize({
   ]
 });
 
-// 🔥 WAIT FOR DB BEFORE USING ROUTES
 sequelize.authenticate()
   .then(() => {
     console.log("DB CONNECTED ✅");
 
-    // OPTIONAL BUT GOOD
     return sequelize.sync();
   })
   .then(() => {
@@ -56,7 +53,6 @@ sequelize.authenticate()
     app.use("/api", registerRoute);
     app.use("/api", loginRoute);
 
-    // ✅ THEN start server
     app.listen(3000, () => {
       console.log("Server running on port 3000");
     });

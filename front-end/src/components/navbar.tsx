@@ -49,13 +49,13 @@ export default function Navbar({ role }: NavbarProps) {
             justifyContent: "center",
             borderRadius: "50%",
             overflow: "hidden",
-            bgcolor: "#51322910" // soft brown tint
+            bgcolor: "#51322910" 
           }}
         >
           <img src={logo} alt="logo" style={{
             width: "100%",
             height: "100%",
-            objectFit: "cover" // 🔥 biar gak gepeng
+            objectFit: "cover" 
           }} />
         </Box>
       </Box>

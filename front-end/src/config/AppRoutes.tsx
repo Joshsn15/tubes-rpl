@@ -7,6 +7,7 @@ import { earthTheme } from "../themes/themes";
 import FinancialReports from "../pages/ManagerPage/FinancialReports";
 import ApprovalPage from "../pages/ManagerPage/ApprovalPage";
 import { lazy } from "react";
+import AddProduct from "../pages/ManagerPage/AddProductPage";
 
 const Register = lazy(() => import("../pages/Register"));
 const MainMenu = lazy(() => import("../pages/MainMenu"));
@@ -27,6 +28,7 @@ export default function AppRoutes() {
                     <Route path="/manager/financialReports" element={<FinancialReports />} />
                     <Route path="/manager/edit/:id" element={<EditProducts />} />
                     <Route path="/manager/approval" element={<ApprovalPage />} />
+                    <Route path="/manager/add-product" element={<AddProduct />} />
                 </Route>
 
                 {/* ── ADMIN ── */}
