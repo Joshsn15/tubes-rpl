@@ -1,19 +1,27 @@
 import { Routes, Route } from "react-router";
 import { ThemeProvider, CssBaseline } from "@mui/material";
+import { lazy } from "react";
+
 import RoleLayout from "../layouts/RoleLayout";
+import Layout from "../components/Layout"; 
+import { earthTheme } from "../themes/themes";
+
+// Manager
 import ManagerDashboard from "../pages/ManagerPage/ManagerDashboard";
 import EditProducts from "../pages/ManagerPage/EditProducts";
-import { earthTheme } from "../themes/themes";
 import FinancialReports from "../pages/ManagerPage/FinancialReports";
 import ApprovalPage from "../pages/ManagerPage/ApprovalPage";
-import { lazy } from "react";
 import AddProduct from "../pages/ManagerPage/AddProductPage";
 
+// Stocker
+import FormLaporan from "../pages/stockForm"; 
+import ReceivalBarang from "../pages/receivalBarang";
+import StockPage from "../pages/stockPage";
+
+// Lazy
 const Register = lazy(() => import("../pages/Register"));
 const MainMenu = lazy(() => import("../pages/MainMenu"));
 const Login = lazy(() => import("../pages/Login"));
-
-
 
 // ── App ────────────────────────────────────────────────────────────────────
 export default function AppRoutes() {
@@ -46,7 +54,11 @@ export default function AppRoutes() {
 
                 {/* ── STOCKER ── */}
                 <Route element={<RoleLayout role="stocker" />}>
-                    {/* disinii pathnya */}
+                    <Route element={<Layout />}>
+                    <Route path="/form" element={<FormLaporan />} />
+                    <Route path="/receival" element={<ReceivalBarang />} />
+                    <Route path="/stock" element={<StockPage />} />
+                </Route>
 
                 </Route>
             </Routes>

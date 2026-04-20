@@ -60,7 +60,6 @@ export default function Navbar({ role }: NavbarProps) {
         </Box>
       </Box>
 
-      {/* Nav Links */}
       {navItems.map((item) => {
         const isActive = location.pathname === item.path;
         return (
@@ -90,7 +89,7 @@ export default function Navbar({ role }: NavbarProps) {
                   width: 6,
                   height: 6,
                   borderRadius: "50%",
-                  bgcolor: "#211f1b"
+                  bgcolor: "#FCE6B7"
                 }
                 : {}
             }}
