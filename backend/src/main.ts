@@ -16,6 +16,9 @@ import { StockLogs } from "./models/StockLogs";
 // ROUTES
 import registerRoute from "./routes/registerRoutes";
 import loginRoute from "./routes/loginRoutes";
+import productRoute from "./routes/productRoutes";
+import stockRoute from "./routes/stockRoutes";
+import ledgerRoute from "./routes/ledgerRoutes";
 
 const app = express();
 app.use(express.json());
@@ -52,7 +55,9 @@ sequelize.authenticate()
     // ✅ NOW register routes
     app.use("/api", registerRoute);
     app.use("/api", loginRoute);
-
+    app.use("/api/products",productRoute);
+    app.use("/api/stock",stockRoute);
+    app.use("/api/ledger",ledgerRoute);
     app.listen(3000, () => {
       console.log("Server running on port 3000");
     });

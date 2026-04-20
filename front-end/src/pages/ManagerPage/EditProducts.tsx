@@ -1,7 +1,8 @@
 import { useNavigate, useParams } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, TextField, Button } from "@mui/material";
-
+import { useAppSelector } from "../../hooks/useAppSelector";
+import { getProduct, updateProduct } from "../../services/pos.api";
 
 // ── Types ──────────────────────────────────────────────────────────────────
 type Category = "FOOD" | "DRINK" | "HEALTH" | "BEAUTY";
@@ -10,51 +11,77 @@ interface Product {
   products_id: string;
   products_name: string;
   category: Category;
-  price: string;
+  price: number;
   stock: number;
   manufacture_date: Date;
   expiry_date: Date;
-  growth: number;
 }
-
-
-// ── Dummy Data ─────────────────────────────────────────────────────────────
-const DUMMY_PRODUCTS: Product[] = [
-  { products_id: "uuid-001", products_name: "Mie Goreng Spesial", category: "FOOD", price: "12500.00", stock: 940, manufacture_date: new Date("2024-10-01"), expiry_date: new Date("2025-10-01"), growth: 10 },
-  { products_id: "uuid-002", products_name: "Minuman Herbal Collagen", category: "DRINK", price: "25000.00", stock: 861, manufacture_date: new Date("2024-09-15"), expiry_date: new Date("2025-09-15"), growth: 3 },
-  { products_id: "uuid-003", products_name: "Joss Vitamin C Effervescent", category: "HEALTH", price: "18900.00", stock: 769, manufacture_date: new Date("2024-08-20"), expiry_date: new Date("2025-08-20"), growth: 2 },
-  { products_id: "uuid-004", products_name: "NABIL Night Cream", category: "BEAUTY", price: "45000.00", stock: 710, manufacture_date: new Date("2024-07-10"), expiry_date: new Date("2025-07-10"), growth: 9 },
-  { products_id: "uuid-005", products_name: "Ngobrol Premium Coffee", category: "DRINK", price: "32000.00", stock: 652, manufacture_date: new Date("2024-11-05"), expiry_date: new Date("2025-11-05"), growth: 4 },
-  { products_id: "uuid-006", products_name: "Susu Kedelai Organik", category: "DRINK", price: "9800.00", stock: 520, manufacture_date: new Date("2024-12-01"), expiry_date: new Date("2025-12-01"), growth: -2 },
-  { products_id: "uuid-007", products_name: "Snack Keripik Tempe", category: "FOOD", price: "7500.00", stock: 1200, manufacture_date: new Date("2025-01-10"), expiry_date: new Date("2025-07-10"), growth: 15 },
-  { products_id: "uuid-008", products_name: "Serum Wajah Brightening", category: "BEAUTY", price: "85000.00", stock: 340, manufacture_date: new Date("2024-06-01"), expiry_date: new Date("2026-06-01"), growth: 22 },
-  { products_id: "uuid-009", products_name: "Madu Hitam Habbatussauda", category: "HEALTH", price: "65000.00", stock: 190, manufacture_date: new Date("2024-05-01"), expiry_date: new Date("2026-05-01"), growth: -5 },
-  { products_id: "uuid-010", products_name: "Biskuit Gandum Fiber", category: "FOOD", price: "15000.00", stock: 880, manufacture_date: new Date("2025-01-01"), expiry_date: new Date("2025-12-31"), growth: 7 },
-];
-
 
 export default function EditProduct() {
   const { id } = useParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { user } = useAppSelector((state) => state.auth);
+  const [products, setProducts] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const product = DUMMY_PRODUCTS.find((p) => p.products_id === id);
+  const [form, setForm] = useState({
+    products_name: "",
+    price: 0,
+  });
 
-  const [form, setForm] = useState(() => ({
-    products_name: product?.products_name || "",
-    price: product?.price || "",
-  }));
-function handleSave(){
-    alert("Product Updated")
-    return navigate('/manager')
-}
+  useEffect(() => {
+    console.log("USER:", user);
+
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const res = await getProduct(id as string);
+        setProducts(res);
+        // ✅ isi form setelah data ada
+        setForm({
+          products_name: res.products_name || "",
+          price: res.price || "",
+        });
+      } catch (err) {
+        console.error("ERROR:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) fetchData();
+  }, [id]);
+  function handleSave() {
+    if (!form.products_name || !form.price) {
+      alert("Please fill in all fields");
+      return;
+    }
+
+    alert("Product Updated");
+    try {
+      updateProduct(id as string, form);
+      navigate("/manager");
+    }
+    catch (err) {
+      console.error("ERROR:", err);
+      alert("Failed to update product");
+    }
+  }
+
+  if (loading) {
+    return <Box sx={{ p: 3 }}>Loading...</Box>;
+  }
+
+  if (!products) {
+    return <Box sx={{ p: 3 }}>Product not found</Box>;
+  }
+
   return (
     <Box sx={{ p: 3 }}>
       <TextField
         label="Product Name"
         value={form.products_name}
-        onChange={(e) =>
-          setForm({ ...form, products_name: e.target.value })
-        }
+        onChange={(e) => setForm({ ...form, products_name: e.target.value })}
         fullWidth
         sx={{ mb: 2 }}
       />
@@ -62,9 +89,7 @@ function handleSave(){
       <TextField
         label="Price"
         value={form.price}
-        onChange={(e) =>
-          setForm({ ...form, price: e.target.value })
-        }
+        onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
         fullWidth
         sx={{ mb: 2 }}
       />

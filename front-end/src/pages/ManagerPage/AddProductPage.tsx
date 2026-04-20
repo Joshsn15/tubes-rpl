@@ -1,57 +1,64 @@
 import { useState } from "react";
+import { addProduct } from "../../services/pos.api";
+import { useNavigate } from "react-router";
+
+
+type Category = "FOOD" | "DRINK" | "HEALTH" | "BEAUTY";
 
 type Product = {
-    name: string;
-    category: string;
+    products_id: string;
+    products_name: string;
+    category: Category;
     price: number;
     stock: number;
-    manufactureDate: string;
-    expiryDate: string;
-};
+    manufacture_date: string;
+    expiry_date: string;
+}
 
 export default function AddProduct() {
     const [form, setForm] = useState<Product>({
-        name: "",
+        products_id: crypto.randomUUID(),
+        products_name: "",
         category: "FOOD",
         price: 0,
         stock: 0,
-        manufactureDate: "",
-        expiryDate: "",
+        manufacture_date: "",
+        expiry_date: "",
     });
-
+    const navigate = useNavigate();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
-        setForm({
-            ...form,
+        setForm((prevForm) => ({
+            ...prevForm,
             [name]:
                 name === "price" || name === "stock"
                     ? Number(value)
                     : value,
-        });
+        }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!form.name || form.price <= 0 || form.stock < 0) {
+        if (!form.products_name || form.price <= 0 || form.stock < 0) {
             alert("Input tidak valid");
             return;
         }
 
         try {
-            const response = await fetch("http://localhost:5000/add-products", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(form),
+            await addProduct(form);
+            alert("Product added successfully");
+            navigate("/manager");
+            setForm({
+                products_id: crypto.randomUUID(),
+                products_name: "",
+                category: "FOOD",
+                price: 0,
+                stock: 0,
+                manufacture_date: "",
+                expiry_date: "",
             });
-
-            const data = await response.json();
-
-            console.log(data);
-            alert("Product berhasil ditambahkan");
         } catch (error) {
             console.error("Error:", error);
         }
@@ -67,8 +74,8 @@ export default function AddProduct() {
                     <label>Product Name</label>
                     <input
                         type="text"
-                        name="name"
-                        value={form.name}
+                        name="products_name"
+                        value={form.products_name}
                         onChange={handleChange}
                         required
                     />
@@ -112,8 +119,8 @@ export default function AddProduct() {
                     <label>Manufacture Date</label>
                     <input
                         type="date"
-                        name="manufactureDate"
-                        value={form.manufactureDate}
+                        name="manufacture_date"
+                        value={form.manufacture_date}
                         onChange={handleChange}
                     />
                 </div>
@@ -123,8 +130,8 @@ export default function AddProduct() {
                     <label>Expiry Date</label>
                     <input
                         type="date"
-                        name="expiryDate"
-                        value={form.expiryDate}
+                        name="expiry_date"
+                        value={form.expiry_date}
                         onChange={handleChange}
                     />
                 </div>

@@ -18,6 +18,7 @@ export class stockControllers {
             res.status(500).json({ message: "Error fetching stock" });
         }
     }
+    
 
     static async receival(req: Request, res: Response) {
         const t = await sequelize.transaction();
