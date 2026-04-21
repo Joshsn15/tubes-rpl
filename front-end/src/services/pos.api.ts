@@ -11,7 +11,7 @@ export const getProducts = async () => {
 
 // 💸 checkout
 export const checkout = async (cart: CartItem[]) => {
-  const res = await fetch(`http://localhost:3000/products/checkout`, {
+  const res = await fetch(`http://localhost:3000/api/pos/checkout`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

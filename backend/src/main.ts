@@ -5,19 +5,17 @@ import cors from "cors";
 import { appConfig } from "./Models/appConfig";
 
 // MODELS
-import { Users } from "./Models/Users";
-import { Suppliers } from "./Models/Suppliers";
-import { Products } from "./Models/Products";
-import { Transactions } from "./Models/Transactions";
-import { TransactionItems } from "./Models/TransactionItems";
-import { PurchaseOrders } from "./Models/PurchaseOrders";
-import { PurchaseOrderItems } from "./Models/PurchaseOrderItems";
-import { StockLogs } from "./Models/StockLogs";
-
+import { Users } from "./models/Users";
+import { Suppliers } from "./models/Suppliers";
+import { Products } from "./models/Products";
+import { Transactions } from "./models/Transactions";
+import { TransactionItems } from "./models/TransactionItems";
+import { PurchaseOrders } from "./models/PurchaseOrders";
+import { PurchaseOrderItems } from "./models/PurchaseOrderItems";
 
 // ROUTES
-import registerRoute from "./routes/registerRoutes";
-import loginRoute from "./routes/loginRoutes";
+import registerRoute from "./routes/register.routes";
+import loginRoute from "./routes/login.routes";
 import posRoutes from "./routes/pos.routes";
 import productRoutes from "./routes/product.routes";
 
@@ -59,9 +57,9 @@ sequelize.authenticate()
     console.log("REGISTERING ROUTES 🔥");
 
     // ✅ NOW register routes
-    app.use("/api", registerRoute);
-    app.use("/api", loginRoute);
-    app.use("/api", posRoutes);
+    app.use("/api/register", registerRoute);
+    app.use("/api/login", loginRoute);
+    app.use("/api/pos", posRoutes);
     app.use("/api/products", productRoutes);
 
     // ✅ THEN start server

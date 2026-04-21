@@ -58,8 +58,9 @@ const ProductManagement = () => {
       );
 
       alert("Price updated");
-    } catch (err) {
-      alert("Failed to update");
+    } catch (err: any) {
+      console.error(err);
+      alert(err?.response?.data?.message || err.message || "Failed to update");
     }
   };
 
