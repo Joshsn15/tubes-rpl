@@ -1,9 +1,8 @@
-import express from "express";
 import { register } from "../controllers/registerController";
 
-const router = express.Router();
+const Router = require("express").Router();
 
 // POST /api/register
-router.post("/register", register);
+Router  .post("/register", register);
 
-export default router;
+export default Router;

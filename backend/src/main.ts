@@ -1,18 +1,11 @@
 import express from "express";
-import { Sequelize } from "sequelize-typescript";
-import { appConfig } from "./models/appConfig";
+import "dotenv/config";
 import cors from "cors"
-// MODELS
-import { Users } from "./models/Users";
-import { Suppliers } from "./models/Suppliers";
-import { Products } from "./models/Products";
-import { Transactions } from "./models/Transactions";
-import { TransactionItems } from "./models/TransactionItems";
-import { PurchaseOrders } from "./models/PurchaseOrders";
-import { PurchaseOrderItems } from "./models/PurchaseOrderItems";
-import { StockLogs } from "./models/StockLogs";
 
-
+console.log("ENV CHECK:");
+console.log("USER:", process.env.DB_USERNAME);
+console.log("PASS:", process.env.DB_PASSWORD);
+console.log("DB:", process.env.DB_NAME);
 // ROUTES
 import registerRoute from "./routes/registerRoutes";
 import loginRoute from "./routes/loginRoutes";
@@ -20,39 +13,15 @@ import productRoute from "./routes/productRoutes";
 import stockRoute from "./routes/stockRoutes";
 import ledgerRoute from "./routes/ledgerRoutes";
 import adminRoute from "./routes/adminRoutes";
-import { StockReports } from "./models/StockReports";
-import { Ledger } from "./models/Ledger";
-
+import { sequelize } from "../config/database";
 
 import posRoutes from "./routes/pos.routes";
-import productRoutes from "./routes/product.routes";
-
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-// 🔥 INIT SEQUELIZE FIRST
-export const sequelize = new Sequelize({
-  username: appConfig.database.username,
-  password: appConfig.database.password,
-  host: appConfig.database.host,
-  database: appConfig.database.database,
-  port: appConfig.database.port,
-  dialect: appConfig.database.dialect,
-  models: [
-    Users,
-    Suppliers,
-    Products,
-    Transactions,
-    TransactionItems,
-    PurchaseOrders,
-    PurchaseOrderItems,
-    StockLogs,
-    StockReports,
-    Ledger
-  ]
-});
 
+sequelize
 sequelize.authenticate()
   .then(() => {
     console.log("DB CONNECTED ✅");
@@ -72,7 +41,6 @@ sequelize.authenticate()
     app.use("/api/ledger",ledgerRoute);
     app.use("/api/admin",adminRoute);
     app.use("/api", posRoutes);
-    app.use("/api/products", productRoutes);
     app.listen(3000, () => {
       console.log("Server running on port 3000");
     });

@@ -2,7 +2,7 @@ import {
     Table, Column, Model, DataType, PrimaryKey,
     CreatedAt, UpdatedAt, BelongsTo
 } from "sequelize-typescript";
-import { Products } from "./Products";
+import { Products } from "./products";
 
 @Table({
     tableName: "stock_reports",

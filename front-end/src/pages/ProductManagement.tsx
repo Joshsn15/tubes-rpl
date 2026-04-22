@@ -26,12 +26,11 @@ const ProductManagement = () => {
 
   useEffect(() => {
     if (!user) return;
-
     getProducts().then(setProducts);
   }, [user]);
 
   // group by category
-  const grouped = products.reduce((acc: any, product) => {
+  const grouped = products.reduce((acc: Record<string, Product[]>, product) => {
     if (!acc[product.category]) acc[product.category] = [];
     acc[product.category].push(product);
     return acc;
@@ -50,7 +49,6 @@ const ProductManagement = () => {
 
       await updateProductPrice(id, newPrice, token);
 
-      // update UI
       setProducts(prev =>
         prev.map(p =>
           p.products_id === id ? { ...p, price: newPrice } : p
@@ -58,32 +56,34 @@ const ProductManagement = () => {
       );
 
       alert("Price updated");
-    } catch (err) {
+    } catch {
       alert("Failed to update");
     }
   };
 
   if (!user) {
-    return <Typography p={3}>Login required</Typography>;
+    return (
+      <Typography sx={{ p: 3 }}>
+        Login required
+      </Typography>
+    );
   }
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h5" mb={3}>
+      <Typography sx={{ mb: 3 }} variant="h5">
         Product Management
       </Typography>
 
-      {Object.entries(grouped).map(([category, items]: any) => (
-        <Box key={category} mb={4}>
-          {/* CATEGORY TITLE */}
-          <Typography variant="h6" mb={2}>
+      {Object.entries(grouped).map(([category, items]) => (
+        <Box key={category} sx={{ mb: 4 }}>
+          <Typography sx={{ mb: 2 }} variant="h6">
             {category}
           </Typography>
 
-          {/* GRID */}
           <Grid container spacing={2}>
-            {items.map((product: Product) => (
-              <Grid item xs={6} md={3} key={product.products_id}>
+            {(items as Product[]).map((product) => (
+              <Grid  sx={{ xs: 6, md: 3 }} key={product.products_id}>
                 <Paper
                   sx={{
                     p: 2,
@@ -94,7 +94,7 @@ const ProductManagement = () => {
                     borderRadius: "12px"
                   }}
                 >
-                  <Typography fontWeight={600}>
+                  <Typography sx={{ fontWeight: 600 }}>
                     {product.products_name}
                   </Typography>
 

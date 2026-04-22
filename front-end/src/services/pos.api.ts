@@ -52,23 +52,34 @@ export const updateProduct = async (id: string, data: Partial<Product>) => {
 }
 
 // 💸 checkout
-export const checkout = async (cart: CartItem[]) => {
-    const res = await fetch(`http://localhost:3000/products/checkout`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            cart: cart.map((c) => ({
-                products_id: c.products_id,
-                qty: c.qty,
-            })),
-        }),
-    });
+export const checkout = async (
+    cart: CartItem[],
+    paymentMethod: string
+) => {
+    const res = await fetch(
+        `http://localhost:3000/api/checkout`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                payment_method: paymentMethod,
+                cart: cart.map((c) => ({
+                    products_id: c.products_id,
+                    qty: c.qty,
+                })),
+            }),
+        }
+    );
 
     const data = await res.json();
 
-    if (!res.ok) throw new Error(data.message || "Checkout failed");
+    if (!res.ok) {
+        throw new Error(
+            data.message || "Checkout failed"
+        );
+    }
 
     return data;
 };
@@ -79,8 +90,8 @@ export const updateProductPrice = async (
     price: number,
     token: string
 ) => {
-    const res = await fetch(`http://localhost:3000/api/products/${id}`, {
-        method: "PATCH",
+    const res = await fetch(`http://localhost:3000/api/products/update-price/${id}`, {
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`
@@ -88,9 +99,13 @@ export const updateProductPrice = async (
         body: JSON.stringify({ price })
     });
 
-    if (!res.ok) throw new Error("Failed to update");
+    const data = await res.json();
+    console.log(data)
+    if (!res.ok) {
+        throw new Error(data.message || "Failed to update");
+    }
 
-    return res.json();
+    return data;
 };
 
 export const getLedgerFromToWhere = async (startDate?: string, endDate?: string) => {

@@ -316,7 +316,7 @@ module.exports = {
         // ── 9. transaction_items ──────────────────────────────────────────
         await queryInterface.bulkInsert('transaction_items', [
             {
-                transcation_item_id: TRX_ITEM_1,
+                transaction_item_id: TRX_ITEM_1,
                 transaction_id: TRX_1,
                 products_id: PRODUCT_1,
                 price: 3000.00,
@@ -326,7 +326,7 @@ module.exports = {
                 deletedAt: null,
             },
             {
-                transcation_item_id: TRX_ITEM_2,
+                transaction_item_id: TRX_ITEM_2,
                 transaction_id: TRX_1,
                 products_id: PRODUCT_2,
                 price: 4000.00,
@@ -336,7 +336,7 @@ module.exports = {
                 deletedAt: null,
             },
             {
-                transcation_item_id: TRX_ITEM_3,
+                transaction_item_id: TRX_ITEM_3,
                 transaction_id: TRX_2,
                 products_id: PRODUCT_3,
                 price: 15000.00,

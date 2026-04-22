@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Ledger } from "../models/Ledger";
+import { Ledger } from "../models/ledger";
 import { Transactions } from "../models/Transactions";
 import { PurchaseOrders } from "../models/PurchaseOrders";
 

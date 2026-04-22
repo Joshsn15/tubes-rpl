@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { Products } from '../models/Products';
+import { Products } from '../models/products';
 import { StockLogs } from '../models/StockLogs';
 import { sequelize } from "../../config/database";
-import { Ledger } from '../models/Ledger';
+import { Ledger } from '../models/ledger';
 import { StockReports } from '../models/StockReports';
 
 export class stockControllers {

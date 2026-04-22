@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router";
 import { isEmail } from "../utils/isEmail";
 import logo from "../images/lokanata_logo.jpeg";
 
@@ -55,7 +55,7 @@ const Register = () => {
       }
 
       alert("Register success!");
-      nav("/"); // or "/login" if you want cleaner UX
+      nav("/login"); // or "/login" if you want cleaner UX
     } catch {
       alert("Server error");
     }

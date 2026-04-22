@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { Users } from "../models/Users";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { sequelize } from "../../config/database";
+import { appConfig } from "../../config/appConfig";
+const Users = sequelize.models.Users as any;
+dotenv.config();
 
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-
-    console.log("INPUT:", email, password); // ✅ safe
 
     if (!email?.trim() || !password?.trim()) {
       return res.status(400).json({
@@ -18,19 +21,13 @@ export const login = async (req: Request, res: Response) => {
       where: { email }
     });
 
-    console.log("USER:", user); // ✅ AFTER declaration
-
     if (!user) {
       return res.status(400).json({
         message: "User not found"
       });
     }
 
-    console.log("DB PASSWORD:", user.password);
-
     const isMatch = await bcrypt.compare(password, user.password);
-
-    console.log("MATCH:", isMatch);
 
     if (!isMatch) {
       return res.status(400).json({
@@ -38,8 +35,22 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
+    // ✅ CHECK ENV FIRST
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET not set");
+    }
+    const secret = appConfig.jwt.secret; 
+    // ✅ GENERATE TOKEN
+    const token = jwt.sign(
+      { userId: user.id, role: user.role },
+      secret,
+      { expiresIn: appConfig.jwt.expiresIn as any }
+    );
+
+    // ✅ RETURN CORRECT STRUCTURE
     return res.status(200).json({
       message: "Login successful",
+      token, // ✅ TOP LEVEL (IMPORTANT)
       user: {
         id: user.id,
         email: user.email,

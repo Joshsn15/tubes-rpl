@@ -1,8 +1,7 @@
 import { Box, Typography, Chip } from "@mui/material";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router";
 import { useAppSelector } from "../hooks/useAppSelector";
-import logo from "../assets/logo.jpeg";
-
+import images from "../images/lokanata_logo.jpeg";
 const MainMenu = () => {
   const navigate = useNavigate();
 
@@ -39,7 +38,7 @@ const MainMenu = () => {
           }}
         >
           <img
-            src={logo}
+            src={images}
             alt="logo"
             style={{
               width: "50px",

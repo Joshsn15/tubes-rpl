@@ -1,8 +1,7 @@
-import { Router } from "express";
 import { checkout } from "../controllers/pos.controller";
 
-const router = Router();
+const Router = require("express").Router();
 
-router.post("/checkout", checkout);
+Router.post("/checkout", checkout);
 
-export default router;
+export default Router;

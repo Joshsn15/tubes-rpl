@@ -29,7 +29,7 @@ type Report = {
   };
 };
 
-export default function stockForm() {
+function StockForm() {
   const [products, setProducts] = useState<Product[]>([]);
   const [reports, setReports] = useState<Report[]>([]);
   const [selected, setSelected] = useState("");
@@ -77,19 +77,19 @@ export default function stockForm() {
   };
 
   // ini yg josh deh
-  const handleApprove = async (id: string) => {
-    await fetch("http://localhost:3000/api/stock/approve-report", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        report_id: id
-      })
-    });
+  // const handleApprove = async (id: string) => {
+  //   await fetch("http://localhost:3000/api/stock/approve-report", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({
+  //       report_id: id
+  //     })
+  //   });
 
-    fetchReports();
-  };
+  //   fetchReports();
+  // };
 
   return (
     <Box
@@ -225,3 +225,4 @@ export default function stockForm() {
     </Box>
   );
 }
+export default StockForm;

@@ -4,14 +4,12 @@ import {
   Model,
   DataType,
   PrimaryKey,
-  ForeignKey,
-  BelongsTo,
   CreatedAt,
   UpdatedAt,
-  DeletedAt
+  DeletedAt,
+  HasMany
 } from "sequelize-typescript";
-
-import { Users } from "./Users.js";
+import { TransactionItems } from "./TransactionItems";
 
 @Table({
   tableName: "transactions",
@@ -33,35 +31,26 @@ export class Transactions extends Model {
     allowNull: false,
     unique: true
   })
-  transaction_code!: string;
+  declare transaction_code: string;
 
-  @ForeignKey(() => Users)
-  @Column({
-    type: DataType.UUID,
-    allowNull: false
-  })
-  cashier_id!: string;
-
-  @BelongsTo(() => Users)
-  cashier!: Users;
 
   @Column({
     type: DataType.DECIMAL(12, 2),
     allowNull: false
   })
-  total_price!: number;
+  declare total_price: number;
 
   @Column({
-    type: DataType.ENUM("CASH","DEBIT","CREDIT","QRIS"),
+    type: DataType.ENUM("CASH", "DEBIT", "CREDIT", "QRIS"),
     allowNull: false
   })
-  payment_method!: "CASH" | "DEBIT" | "CREDIT" | "QRIS";
+  declare payment_method: "CASH" | "DEBIT" | "CREDIT" | "QRIS";
 
   @Column({
     type: DataType.DATE,
     defaultValue: DataType.NOW
   })
-  transaction_date!: Date;
+  declare transaction_date: Date;
 
   @CreatedAt
   declare createdAt: Date;
@@ -71,4 +60,7 @@ export class Transactions extends Model {
 
   @DeletedAt
   declare deletedAt: Date;
+  @HasMany(() => TransactionItems, 'transaction_id')
+  declare ti: TransactionItems[];
 }
+

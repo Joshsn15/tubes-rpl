@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import {
     Dialog,
@@ -16,7 +17,8 @@ export default function EmployeeForm({ open, onClose, onSuccess, data }: any) {
         role: "EMPLOYEE"
     });
 
-    useEffect(() => {
+    try{
+        useEffect(() => {
         if (data) {
             setForm({
                 username: data.username || "",
@@ -33,6 +35,9 @@ export default function EmployeeForm({ open, onClose, onSuccess, data }: any) {
             });
         }
     }, [data]);
+    } catch (err) {
+        console.error(err);
+    }
 
     const handleSave = async () => {
         if (!form.username || !form.email || (!data && !form.password)) {

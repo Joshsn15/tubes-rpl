@@ -8,6 +8,6 @@ export type Product = {
 export type CartItem = {
   products_id: string;
   products_name: string;
-  price: string;
+  price: number;
   qty: number;
 };

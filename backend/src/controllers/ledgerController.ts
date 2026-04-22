@@ -1,4 +1,4 @@
-import { Ledger } from "../models/Ledger";
+import { Ledger } from "../models/ledger";
 import { fetchLedger } from "../services/ledger.service";
 import { Request, Response } from "express";
 export class ledgerController {

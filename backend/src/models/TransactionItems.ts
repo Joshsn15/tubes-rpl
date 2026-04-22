@@ -11,7 +11,7 @@ import {
   DeletedAt
 } from "sequelize-typescript";
 
-import { Products } from "./Products.js";
+import { Products } from "./products.js";
 import { Transactions } from "./Transactions.js";
 @Table({
   tableName: "transaction_items",
@@ -34,10 +34,10 @@ export class TransactionItems extends Model {
     type: DataType.UUID,
     allowNull: false
   })
-  transaction_id!: string;
+  declare transaction_id: string;
 
   @BelongsTo(() => Transactions)
-  transaction!: Transactions;
+  declare transaction: Transactions;
 
   // FK → Product
   @ForeignKey(() => Products)
@@ -45,22 +45,22 @@ export class TransactionItems extends Model {
     type: DataType.UUID,
     allowNull: false
   })
-  product_id!: string;
+  declare products_id: string;
 
   @BelongsTo(() => Products)
-  product!: Products;
+  declare product: Products;
 
   @Column({
     type: DataType.DECIMAL(12, 2),
     allowNull: false
   })
-  price!: number;
+  declare price: number;
 
   @Column({
     type: DataType.INTEGER,
     allowNull: false
   })
-  qty!: number;
+  declare qty: number;
 
   @CreatedAt
   declare createdAt: Date;

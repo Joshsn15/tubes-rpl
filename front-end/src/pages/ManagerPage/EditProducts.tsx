@@ -51,6 +51,7 @@ export default function EditProduct() {
 
     if (id) fetchData();
   }, [id]);
+  
   function handleSave() {
     if (!form.products_name || !form.price) {
       alert("Please fill in all fields");

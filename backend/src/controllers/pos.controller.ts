@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { Products } from "../models/Products";
+import { Products } from "../models/products";
 import { TransactionItems } from "../models/TransactionItems";
+import { Transactions } from "../models/Transactions";
 import { StockLogs } from "../models/StockLogs";
-import { sequelize } from "../main"; // adjust if needed
-
+import { sequelize } from "../../config/database";
 export const checkout = async (req: Request, res: Response) => {
   const t = await sequelize.transaction();
 
@@ -30,16 +30,29 @@ export const checkout = async (req: Request, res: Response) => {
       // 💰 calculate total
       total += Number(product.price) * item.qty;
 
+      //create transaction
+      const trx = await Transactions.create({
+        transaction_code: `TRX-${Date.now()}`,   // ✅ REQUIRED
+        total_price: total,                      // ✅ REQUIRED
+        payment_method: req.body.payment_method || "CASH", // ✅ REQUIRED
+      }, { transaction: t });
+
       // 📉 reduce stock
       product.stock -= item.qty;
       await product.save({ transaction: t });
 
       // 🧾 create transaction item
       await TransactionItems.create({
+        transaction_id: trx.transaction_id,
         products_id: product.products_id,
         qty: item.qty,
         price: product.price,
       }, { transaction: t });
+
+      console.log(
+        "ATTRIBUTES:",
+        Object.keys(TransactionItems.getAttributes())
+      );
 
       // 📊 log stock
       await StockLogs.create({
@@ -59,10 +72,14 @@ export const checkout = async (req: Request, res: Response) => {
     });
 
   } catch (error: any) {
-    await t.rollback();
+    console.error("💥 ERROR NAME:", error.name);
+  console.error("💥 ERROR MSG:", error.message);
+  console.error("💥 FULL:", error);
 
-    return res.status(400).json({
-      message: error.message || "Checkout failed",
-    });
+  await t.rollback();
+
+  return res.status(400).json({
+    message: error.message || "Checkout failed",
+  });
   }
 };
