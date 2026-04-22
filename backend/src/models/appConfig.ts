@@ -8,7 +8,7 @@ export const appConfig = {
         password: pe.DB_PASSWORD ?? "8888",
         host: pe.DB_HOST ?? "localhost",
         database: pe.DB_NAME ?? "tubes_rpl_minimarket",
-        port: parseInt(pe.DB_PORT ?? "5432"),   // tambah ini
+        port: parseInt(pe.DB_PORT ?? "5432"),  
         dialect: (pe.DB_DIALECT ?? "postgres") as Dialect
     },
     server: {

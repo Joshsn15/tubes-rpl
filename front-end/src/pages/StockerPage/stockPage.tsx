@@ -23,20 +23,20 @@ export default function StockPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("ALL");
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await fetch("http://localhost:3000/api/stock");
-                const data = await res.json();
-                setProducts(data.data);
-                console.log(data.data)
-            } catch (err) {
-                console.error(err);
-            }
-        };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/stock");
+        const data = await res.json();
+        setProducts(data.data);
+        console.log(data.data)
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-        fetchData();
-    }, []);
+    fetchData();
+  }, []);
 
   const filtered = products.filter((p) => {
     const matchSearch = p.products_name
@@ -60,7 +60,6 @@ export default function StockPage() {
         p: 4
       }}
     >
-      {/* TITLE */}
       <Typography
         variant="h4"
         sx={{
@@ -73,7 +72,6 @@ export default function StockPage() {
         Stock Dashboard
       </Typography>
 
-      {/* SUMMARY */}
       <Box
         sx={{
           display: "flex",

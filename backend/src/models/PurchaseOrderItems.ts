@@ -15,17 +15,23 @@ export class PurchaseOrderItems extends Model {
     })
     declare poi_id: string;
 
+     @Column({
+        type: DataType.UUID,
+        allowNull: false
+    })
+    declare po_id: string;
+
     @Column({
         type: DataType.INTEGER,
         allowNull: true,
     })
-    purchase_qty!: number;
+    declare purchase_qty: number;
 
     @Column({
         type: DataType.DECIMAL(12,2),
         allowNull: false,
     })
-    cost!: string;
+    declare cost: string;
 
     @CreatedAt
     declare createdAt: Date;
@@ -37,6 +43,6 @@ export class PurchaseOrderItems extends Model {
     declare deletedAt: Date;
 
     @BelongsTo(() => PurchaseOrders, 'po_id')
-    pos!: PurchaseOrders;
+    declare pos: PurchaseOrders;
     
 }

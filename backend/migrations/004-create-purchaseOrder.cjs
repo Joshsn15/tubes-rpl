@@ -41,7 +41,7 @@ module.exports = {
             defaultValue: Sequelize.UUIDV4,
             allowNull: false,
             references: { 
-                model: 'suppliers',
+                model: 'Suppliers',
                 key: 'suppliers_id'
             },
             onUpdate: 'CASCADE',

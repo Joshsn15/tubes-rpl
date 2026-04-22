@@ -24,28 +24,28 @@ export class Ledger extends Model {
     type: DataType.ENUM("SALE", "PURCHASE"),
     allowNull: false
   })
-  reference_type!: "SALE" | "PURCHASE";
+  declare reference_type: "SALE" | "PURCHASE";
 
   @Column({
     type: DataType.UUID,
     defaultValue: DataType.UUIDV4,
     allowNull: false,
   })
-  reference_id!: string;
+  declare reference_id: string;
 
   @Column({
     type: DataType.DECIMAL(15, 2),
     allowNull: false,
     defaultValue: 0
   })
-  debit!: number;
+  declare debit: number;
 
   @Column({
     type: DataType.DECIMAL(15, 2),
     allowNull: false,
     defaultValue: 0
   })
-  credit!: number;
+  declare credit: number;
 
   @CreatedAt
     declare createdAt: Date;

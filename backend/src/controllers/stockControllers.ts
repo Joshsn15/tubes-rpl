@@ -29,6 +29,7 @@ export class stockControllers {
             });
 
             res.json({ data: reports });
+            console.log(reports)
 
         } catch (error) {
             console.error(error);
@@ -92,13 +93,11 @@ export class stockControllers {
                 const qty = Number(item.qty || 0);
                 const price = Number(product.getDataValue("price") || 0);
 
-                // ✅ update stock
                 product.setDataValue("stock", currentStock + qty);
                 await product.save({ transaction: t });
 
                 console.log("STOCK UPDATED");
 
-                // ✅ stock log
                 await StockLogs.create({
                     products_id: item.products_id,
                     change_type: "IN",
@@ -128,7 +127,7 @@ export class stockControllers {
             res.json({ success: true });
 
         } catch (error: any) {
-            console.error("🔥 RECEIVAL ERROR FULL:", error);
+            console.error("RECEIVAL ERROR FULL:", error);
             await t.rollback();
             res.status(500).json({ message: error.message });
         }
@@ -169,11 +168,9 @@ export class stockControllers {
 
             const diff = report.difference;
 
-            // 🔥 update stock
             product.stock += diff;
             await product.save({ transaction: t });
 
-            // 🔥 stock log
             await StockLogs.create({
                 products_id: report.products_id,
                 change_type: "ADJUST",
@@ -181,17 +178,16 @@ export class stockControllers {
                 reference_type: "MANUAL"
             }, { transaction: t });
 
-            // 🔥 ledger
-            if (diff < 0) {
-                await Ledger.create({
-                    reference_type: "ADJUST",
-                    reference_id: report.products_id,
-                    debit: 0,
-                    credit: Math.abs(diff) * product.price
-                }, { transaction: t });
-            }
+            // ini gatau ledger dipake ga
+            // if (diff < 0) {
+            //     await Ledger.create({
+            //         reference_type: "ADJUST",
+            //         reference_id: report.products_id,
+            //         debit: 0,
+            //         credit: Math.abs(diff) * product.price
+            //     }, { transaction: t });
+            // }
 
-            // 🔥 update status
             report.status = "APPROVED";
             await report.save({ transaction: t });
 

@@ -4,7 +4,7 @@ import { useAppDispatch } from "../hooks/useAppDispatch";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { loginUser } from "../store/authSlice";
 import { isEmail } from "../utils/isEmail";
-import logo from "../images/lokanata_logo.jpeg";
+import logo from "../assets/logo.png";
 
 import {
     Box,

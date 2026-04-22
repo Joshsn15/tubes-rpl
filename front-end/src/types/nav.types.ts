@@ -1,10 +1,10 @@
 export type Role = "manager" | "admin" | "employee" | "stocker";
- 
+
 export interface NavItem {
   label: string;
   path: string;
 }
- 
+
 export const NAV_CONFIG: Record<Role, NavItem[]> = {
   manager: [
     { label: "Dashboard", path: "/manager" },
@@ -12,9 +12,11 @@ export const NAV_CONFIG: Record<Role, NavItem[]> = {
     { label: "Item Minus Approval", path: "/manager/approval" },
     { label: "Add New Product", path: "/manager/add-product" },
   ],
+  
   admin: [
-    // { label: "Label nama yang ada di nav", path: "tujuan path" },
+    { label: "Manage Employee", path: "/employee" },
   ],
+
   employee: [
     // { label: "Label nama yang ada di nav", path: "tujuan path" },
 
@@ -25,7 +27,7 @@ export const NAV_CONFIG: Record<Role, NavItem[]> = {
     { label: "Receival Barang", path: "/receival" },
   ],
 };
- 
+
 export const ROLE_META: Record<Role, { label: string; color: string; chipColor: string }> = {
   manager: { label: "Manager", color: "#00e676", chipColor: "#00e67620" }, // warna chip / tulisan role di nav kanan
   admin: { label: "Admin", color: "#7c4dff", chipColor: "#7c4dff20" },

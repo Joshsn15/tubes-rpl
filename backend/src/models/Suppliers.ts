@@ -17,14 +17,14 @@ export class Suppliers extends Model {
         type: DataType.STRING,
         allowNull: false,
     })
-    name!: string;
+    declare name: string;
 
     @Column({
         type: DataType.STRING,
         allowNull: false,
         unique: true,
     })
-    contact_phone!: string;
+    declare contact_phone: string;
 
     @CreatedAt
     declare createdAt: Date;

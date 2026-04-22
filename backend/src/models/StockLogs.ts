@@ -19,31 +19,31 @@ export class StockLogs extends Model {
         type: DataType.UUID,
         allowNull: false
     })
-    products_id!: string;
+    declare products_id: string;
 
     @Column({
         type: DataType.ENUM('IN', 'OUT', 'ADJUST'),
         allowNull: true,
     })
-    change_type!: 'IN' | 'OUT' | 'ADJUST';
+    declare change_type: 'IN' | 'OUT' | 'ADJUST';
 
     @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })
-    stock_qty!: number;
+    declare stock_qty: number;
 
     @Column({
         type: DataType.ENUM('SALE', 'PURCHASE'),
         allowNull: true,
     })
-    reference_type!: 'SALE' | 'PURCHASE';
+    declare reference_type: 'SALE' | 'PURCHASE';
 
     @Column({
         type: DataType.UUID,
         allowNull: false,
     })
-    reference_id!: string;
+    declare reference_id: string;
 
     @CreatedAt
     declare createdAt: Date;
@@ -55,6 +55,6 @@ export class StockLogs extends Model {
     declare deletedAt: Date;
 
     @BelongsTo(() => Products, 'products_id')
-    products!: Products;
+    declare products: Products;
 
 }

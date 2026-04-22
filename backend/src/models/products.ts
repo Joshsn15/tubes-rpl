@@ -2,9 +2,10 @@ import { Table, Column, Model, DataType, PrimaryKey, CreatedAt, UpdatedAt, Delet
 import { PurchaseOrderItems } from './PurchaseOrderItems';
 import { StockLogs } from './StockLogs';
 import { TransactionItems } from './TransactionItems';
+import { StockReports } from './StockReports';
 
 @Table({
-    tableName: 'products',
+    tableName: 'Products',
     timestamps: true,
     paranoid: true,
 })
@@ -21,37 +22,37 @@ export class Products extends Model {
         type: DataType.STRING,
         allowNull: false,
     })
-    products_name!: string;
+    declare products_name: string;
 
     @Column({
         type: DataType.ENUM('FOOD', 'DRINK', 'HEALTH', 'BEAUTY'),
         allowNull: false,
     })
-    category!: 'FOOD' | 'DRINK' | 'HEALTH' | 'BEAUTY';
+    declare category: 'FOOD' | 'DRINK' | 'HEALTH' | 'BEAUTY';
 
     @Column({
-        type: DataType.DECIMAL(12,2),
+        type: DataType.DECIMAL(12, 2),
         allowNull: false,
     })
-    price!: number;
+    declare price: number;
 
     @Column({
         type: DataType.INTEGER,
         allowNull: true,
     })
-    stock!: number;
+    declare stock: number;
 
     @Column({
         type: DataType.DATE,
         allowNull: true,
     })
-    manufacture_date!: Date;
+    declare manufacture_date: Date;
 
     @Column({
         type: DataType.DATE,
         allowNull: true,
     })
-    expiry_date!: Date;
+    declare expiry_date: Date;
 
     @CreatedAt
     declare createdAt: Date;
@@ -63,11 +64,14 @@ export class Products extends Model {
     declare deletedAt: Date;
 
     @HasMany(() => PurchaseOrderItems, 'poi_id')
-    poi!: PurchaseOrderItems[];
+    declare poi: PurchaseOrderItems[];
 
     @HasMany(() => StockLogs, 'stock_id')
-    stocks!: StockLogs[];
+    declare stocks: StockLogs[];
 
-    @HasMany(() => TransactionItems, 'stock_id')
-    tis!: TransactionItems[];
+    @HasMany(() => TransactionItems, 'transaction_item_id')
+    declare tis: TransactionItems[];
+
+    @HasMany(() => StockReports, "report_id")
+    declare reports: StockReports[];
 }

@@ -14,35 +14,35 @@ export class StockReports extends Model {
         type: DataType.UUID,
         defaultValue: DataType.UUIDV4
     })
-    report_id!: string;
+    declare report_id: string;
 
     @Column({
         type: DataType.UUID,
         allowNull: false
     })
-    products_id!: string;
+    declare products_id: string;
 
     @Column(DataType.INTEGER)
-    system_stock!: number;
+    declare system_stock: number;
 
     @Column(DataType.INTEGER)
-    actual_stock!: number;
+    declare actual_stock: number;
 
     @Column(DataType.INTEGER)
-    difference!: number;
+    declare difference: number;
 
     @Column({
         type: DataType.STRING,
         defaultValue: "PENDING"
     })
-    status!: "PENDING" | "APPROVED" | "REJECTED";
+    declare status: "PENDING" | "APPROVED" | "REJECTED";
 
     @CreatedAt
-    createdAt!: Date;
+    declare createdAt: Date;
 
     @UpdatedAt
-    updatedAt!: Date;
+    declare updatedAt: Date;
 
     @BelongsTo(() => Products, "products_id")
-    product!: Products;
+    declare product: Products;
 }

@@ -46,7 +46,7 @@ module.exports = {
     async up(queryInterface, Sequelize) {
 
         // ── 1. suppliers ──────────────────────────────────────────────────
-        await queryInterface.bulkInsert('suppliers', [
+        await queryInterface.bulkInsert('Suppliers', [
             {
                 suppliers_id: SUPPLIER_1,
                 name: 'PT Indofood Sukses Makmur',
@@ -67,7 +67,7 @@ module.exports = {
 
         // ── 2. users ──────────────────────────────────────────────────────
         // password di bawah adalah bcrypt hash dari "password123"
-        await queryInterface.bulkInsert('users', [
+        await queryInterface.bulkInsert('Users', [
             {
                 user_id: USER_1,
                 username: 'admin01',
@@ -133,7 +133,7 @@ module.exports = {
         ]);
 
         // ── 4. products ───────────────────────────────────────────────────
-        await queryInterface.bulkInsert('products', [
+        await queryInterface.bulkInsert('Products', [
             {
                 products_id: PRODUCT_1,
                 products_name: 'Indomie Goreng',
@@ -384,9 +384,9 @@ module.exports = {
         await queryInterface.bulkDelete('stock_logs', null, {});
         await queryInterface.bulkDelete('purchase_order_items', null, {});
         await queryInterface.bulkDelete('purchase_orders', null, {});
-        await queryInterface.bulkDelete('products', null, {});
+        await queryInterface.bulkDelete('Products', null, {});
         await queryInterface.bulkDelete('customer', null, {});
-        await queryInterface.bulkDelete('users', null, {});
-        await queryInterface.bulkDelete('suppliers', null, {});
+        await queryInterface.bulkDelete('Users', null, {});
+        await queryInterface.bulkDelete('Suppliers', null, {});
     }
 };

@@ -16,16 +16,22 @@ export class PurchaseOrders extends Model {
     declare po_id: string;
 
     @Column({
-        type: DataType.DECIMAL(12,2),
+        type: DataType.UUID,
+        allowNull: false
+    })
+    declare suppliers_id: string;
+
+    @Column({
+        type: DataType.DECIMAL(12, 2),
         allowNull: false,
     })
-    total_cost!: string;
+    declare total_cost: string;
 
     @Column({
         type: DataType.ENUM('PENDING', 'RECEIVED', 'CANCELED'),
         allowNull: true,
     })
-    status!: 'PENDING' | 'RECEIVED' | 'CANCELED';
+    declare status: 'PENDING' | 'RECEIVED' | 'CANCELED';
 
 
     @CreatedAt
@@ -38,6 +44,6 @@ export class PurchaseOrders extends Model {
     declare deletedAt: Date;
 
     @BelongsTo(() => Suppliers, 'suppliers_id')
-    suppliers!: Suppliers;
-    
+    declare suppliers: Suppliers;
+
 }

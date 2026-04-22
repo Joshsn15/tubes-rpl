@@ -3,7 +3,6 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import { lazy } from "react";
 
 import RoleLayout from "../layouts/RoleLayout";
-import Layout from "../components/Layout"; 
 import { earthTheme } from "../themes/themes";
 
 // Manager
@@ -13,16 +12,18 @@ import FinancialReports from "../pages/ManagerPage/FinancialReports";
 import ApprovalPage from "../pages/ManagerPage/ApprovalPage";
 import AddProduct from "../pages/ManagerPage/AddProductPage";
 
-// Stocker
-import FormLaporan from "../pages/stockForm"; 
-import ReceivalBarang from "../pages/receivalBarang";
-import StockPage from "../pages/stockPage";
 
 // Lazy
 const Register = lazy(() => import("../pages/Register"));
 const MainMenu = lazy(() => import("../pages/MainMenu"));
 const Login = lazy(() => import("../pages/Login"));
 
+//stocker
+const FormLaporan = lazy(() => import("../pages/StockerPage/stockForm"));
+const ReceivalBarang = lazy(() => import("../pages/StockerPage/receivalBarang"));
+const StockPage = lazy(() => import("../pages/StockerPage/stockPage"));
+
+const EmployeeCRUD = lazy(() => import("../pages/AdminPage/employeePage"));
 // ── App ────────────────────────────────────────────────────────────────────
 export default function AppRoutes() {
     return (
@@ -41,7 +42,8 @@ export default function AppRoutes() {
 
                 {/* ── ADMIN ── */}
                 <Route element={<RoleLayout role="admin" />}>
-                    {/* disinii pathnya */}
+                    <Route path="/employee" element={<EmployeeCRUD />} />
+
                 </Route>
 
                 {/* ── EMPLOYEE ── */}
@@ -54,11 +56,9 @@ export default function AppRoutes() {
 
                 {/* ── STOCKER ── */}
                 <Route element={<RoleLayout role="stocker" />}>
-                    <Route element={<Layout />}>
-                    <Route path="/form" element={<FormLaporan />} />
-                    <Route path="/receival" element={<ReceivalBarang />} />
-                    <Route path="/stock" element={<StockPage />} />
-                </Route>
+                        <Route path="/form" element={<FormLaporan />} />
+                        <Route path="/receival" element={<ReceivalBarang />} />
+                        <Route path="/stock" element={<StockPage />} />
 
                 </Route>
             </Routes>

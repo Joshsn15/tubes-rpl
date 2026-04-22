@@ -25,7 +25,7 @@ export default function ReceivalBarang() {
             try {
                 const res = await fetch("http://localhost:3000/api/stock");
                 const data = await res.json();
-                setProducts(data);
+                setProducts(data.data);
             } catch (err) {
                 console.error(err);
             }
@@ -78,7 +78,6 @@ export default function ReceivalBarang() {
         >
             <Box sx={{ width: "100%", maxWidth: 850 }}>
 
-                {/* TITLE */}
                 <Typography
                     variant="h4"
                     sx={{
@@ -91,7 +90,6 @@ export default function ReceivalBarang() {
                     Receival Barang
                 </Typography>
 
-                {/* CARD */}
                 <Card
                     sx={{
                         width: "100%",
@@ -112,7 +110,6 @@ export default function ReceivalBarang() {
                             pt: 10
                         }}
                     >
-                        {/* PILIH PRODUK */}
                         <TextField
                             select
                             fullWidth
@@ -127,7 +124,6 @@ export default function ReceivalBarang() {
                             ))}
                         </TextField>
 
-                        {/* QTY */}
                         <TextField
                             type="number"
                             label="Jumlah Masuk"
@@ -137,7 +133,6 @@ export default function ReceivalBarang() {
                             }
                         />
 
-                        {/* BUTTON */}
                         <Button
                             variant="contained"
                             fullWidth

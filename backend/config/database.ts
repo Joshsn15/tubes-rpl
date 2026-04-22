@@ -9,6 +9,7 @@ import { Suppliers } from '../src/models/Suppliers';
 import { TransactionItems } from '../src/models/TransactionItems';
 import { Transactions } from '../src/models/Transactions';
 import { Users } from '../src/models/Users';
+import { StockReports } from '../src/models/StockReports';
 
 export const sequelize = new Sequelize({
     username: appConfig.database.username,
@@ -26,6 +27,7 @@ export const sequelize = new Sequelize({
         Suppliers,
         TransactionItems,
         Transactions,
-        Users
+        Users,
+        StockReports
     ]
 });

@@ -18,6 +18,8 @@ import loginRoute from "./routes/loginRoutes";
 import productRoute from "./routes/productRoutes";
 import stockRoute from "./routes/stockRoutes";
 import ledgerRoute from "./routes/ledgerRoutes";
+import adminRoute from "./routes/adminRoutes";
+import { StockReports } from "./models/StockReports";
 
 const app = express();
 app.use(express.json());
@@ -37,7 +39,8 @@ const sequelize = new Sequelize({
     TransactionItems,
     PurchaseOrders,
     PurchaseOrderItems,
-    StockLogs
+    StockLogs,
+    StockReports
   ]
 });
 
@@ -56,6 +59,7 @@ sequelize.authenticate()
     app.use("/api/products",productRoute);
     app.use("/api/stock",stockRoute);
     app.use("/api/ledger",ledgerRoute);
+    app.use("/api/admin",adminRoute);
     app.listen(3000, () => {
       console.log("Server running on port 3000");
     });

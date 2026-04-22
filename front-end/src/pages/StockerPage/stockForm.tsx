@@ -36,13 +36,13 @@ export default function stockForm() {
   const [actualStock, setActualStock] = useState<number | "">("");
 
   useEffect(() => {
-    fetch("http://localhost:3000/stock")
+    fetch("http://localhost:3000/api/stock")
       .then(res => res.json())
       .then(data => setProducts(data.data));
   }, []);
 
   const fetchReports = () => {
-    fetch("http://localhost:3000/stock/reports")
+    fetch("http://localhost:3000/api/stock/reports")
       .then(res => res.json())
       .then(data => setReports(data.data));
   };
@@ -62,7 +62,7 @@ export default function stockForm() {
       return;
     }
 
-    await fetch("http://localhost:3000/stock/create", {
+    await fetch("http://localhost:3000/api/stock/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -76,8 +76,9 @@ export default function stockForm() {
     fetchReports();
   };
 
+  // ini yg josh deh
   const handleApprove = async (id: string) => {
-    await fetch("http://localhost:3000/stock/approve-report", {
+    await fetch("http://localhost:3000/api/stock/approve-report", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -100,12 +101,11 @@ export default function stockForm() {
     >
       <Typography
         variant="h5"
-        sx={{ color: "#513229", fontWeight: 700 ,mb:3}}
+        sx={{ color: "#513229", fontWeight: 700, mb: 3 }}
       >
         Laporan Selisih Stock
       </Typography>
 
-      {/* FORM */}
       <Card
         sx={{
           mt: 2,
@@ -123,7 +123,7 @@ export default function stockForm() {
             label="Pilih Produk"
             value={selected}
             onChange={(e) => setSelected(e.target.value)}
-            sx={{ mt:2 , mb: 2 }}
+            sx={{ mt: 2, mb: 2 }}
           >
             {products.map((p) => (
               <MenuItem key={p.products_id} value={p.products_id}>
@@ -148,7 +148,7 @@ export default function stockForm() {
             onClick={handleSubmit}
             disabled={!selected || actualStock === ""}
             sx={{
-              backgroundColor: "#513229",
+              backgroundColor: "#d5cbc8",
               "&:hover": {
                 backgroundColor: "#3b231c"
               },
@@ -163,10 +163,9 @@ export default function stockForm() {
 
       <Divider sx={{ mb: 3 }} />
 
-      {/* LIST */}
       <Typography
         variant="h6"
-        sx={{ color: "#513229", fontWeight: 600 ,mb:2 }}
+        sx={{ color: "#513229", fontWeight: 600, mb: 2 }}
       >
         Daftar Laporan
       </Typography>
@@ -179,16 +178,16 @@ export default function stockForm() {
             backgroundColor: "#fff",
             borderRadius: 3,
             borderLeft: `6px solid ${r.status === "APPROVED"
-                ? "#7CB342"
-                : r.status === "REJECTED"
-                  ? "#E53935"
-                  : "#F9A825"
+              ? "#7CB342"
+              : r.status === "REJECTED"
+                ? "#E53935"
+                : "#F9A825"
               }`,
             boxShadow: "0 4px 15px rgba(0,0,0,0.05)"
           }}
         >
           <CardContent>
-            <Typography  sx={{ color: "#513229" ,fontWeight:"bold"}}>
+            <Typography sx={{ color: "#513229", fontWeight: "bold" }}>
               {r.product?.products_name}
             </Typography>
 
@@ -199,13 +198,13 @@ export default function stockForm() {
             <Typography
               sx={{
                 color: r.difference < 0 ? "#E53935" : "#2E7D32",
-              fontWeight:"bold"
+                fontWeight: "bold"
               }}
             >
               Selisih: {r.difference}
             </Typography>
 
-            <Box sx={{mt:1}}>
+            <Box sx={{ mt: 1 }}>
               <Chip
                 label={r.status}
                 sx={{

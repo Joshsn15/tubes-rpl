@@ -1,9 +1,9 @@
-import express from "express";
+import express, { Router } from "express";
 import { login } from "../controllers/loginController";
 
-const router = express.Router();
+const loginRoutes: Router = express.Router();
 
 // POST /api/login
-router.post("/login", login);
+loginRoutes.post("/login", login);
 
-export default router;
+export default loginRoutes;
