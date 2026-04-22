@@ -1,6 +1,6 @@
 
 export default function ApprovalPage() {
     return (
-        <div>ApprovalPage</div>
+        <div>Stock Report</div>
     )
 }

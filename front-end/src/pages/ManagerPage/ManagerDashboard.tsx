@@ -70,7 +70,7 @@ export default function ManagerDashboard() {
       try {
         setLoading(true);
         const res = await getStock();
-        console.log("RES DATA:", res.data);
+        // console.log("RES DATA:", res.data); check
         setProducts(res.data);
       } catch (err) {
         console.error("ERROR:", err);
@@ -111,13 +111,13 @@ export default function ManagerDashboard() {
 
       {/* HEADER */}
       <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-        <Typography sx={{ fontSize: 18, fontWeight: 700 }}>
+        <Typography sx={{ fontSize: 40, fontWeight: 700 }}>
           Product Management
         </Typography>
         <Box sx={{ flex: 1 }} />
         <Button
           variant="contained"
-          size="small"
+          size="medium"
           onClick={() => handleNavigate("/manager/add-product")}
         >
           + Add Product
@@ -126,7 +126,7 @@ export default function ManagerDashboard() {
 
       {/* SEARCH */}
       <Box sx={{ display: "flex", alignItems: "center", mb: 1.5 }}>
-        <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
+        <Typography sx={{ fontSize: 25, fontWeight: 700 }}>
           Stocks
         </Typography>
         <Box sx={{ flex: 1 }} />
@@ -168,10 +168,10 @@ export default function ManagerDashboard() {
 
       {/* TABLE */}
       <Card>
-        <TableContainer>
-          <Table size="small">
+        <TableContainer >
+          <Table size="small" >
             <TableHead>
-              <TableRow>
+              <TableRow >
                 <TableCell>Name</TableCell>
                 <TableCell>Price</TableCell>
                 <TableCell>Stock</TableCell>
@@ -181,16 +181,16 @@ export default function ManagerDashboard() {
               </TableRow>
             </TableHead>
 
-            <TableBody>
+            <TableBody sx={{backgroundColor: "#fff"}}>
               {filtered.map((p) => {
                 const meta = CATEGORY_META[p.category];
 
                 return (
-                  <TableRow key={p.products_id}>
-                    <TableCell>{p.products_name}</TableCell>
+                  <TableRow key={p.products_id} sx={{ "&:hover": { background: "#f5f1e8" } , transition: "background .15s"  }}>
+                    <TableCell >{p.products_name}</TableCell>
                     <TableCell>{fmt(p.price)}</TableCell>
-                    <TableCell>{p.stock}</TableCell>
-                    <TableCell>
+                    <TableCell >{p.stock}</TableCell>
+                    <TableCell >
                       <Chip
                         icon={<Box sx={{ color: meta.color }}>{meta.icon}</Box>}
                         label={p.category}
@@ -208,6 +208,12 @@ export default function ManagerDashboard() {
                     <TableCell>
                       <Button
                         size="small"
+                        sx={{
+                          textTransform: "none",
+                          fontSize: 12,
+                          backgroundColor: "#3d2400",
+                          color: "#fff",                          "&:hover": { backgroundColor: "#5f3900cc" },
+                        }}
                         onClick={() =>
                           handleNavigate(`/manager/edit/${p.products_id}`)
                         }

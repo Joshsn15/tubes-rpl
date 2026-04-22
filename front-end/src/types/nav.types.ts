@@ -9,7 +9,7 @@ export const NAV_CONFIG: Record<Role, NavItem[]> = {
   manager: [
     { label: "Dashboard", path: "/manager" },
     { label: "Financial Reports", path: "/manager/FinancialReports" },
-    { label: "Item Minus Approval", path: "/manager/approval" },
+    { label: "Stock Reports", path: "/manager/stock-reports" },
     { label: "Add New Product", path: "/manager/add-product" },
   ],
   admin: [

@@ -65,7 +65,7 @@ export default function AddProduct() {
     };
 
     return (
-        <div style={{ padding: "20px", maxWidth: "500px" }}>
+        <div style={{ padding: "20px", maxWidth: "500px",justifyContent: "center", margin: "0 auto", borderRadius: "8px", backgroundColor: "#fff" }}>
             <h2>Add New Product</h2>
 
             <form onSubmit={handleSubmit}>
