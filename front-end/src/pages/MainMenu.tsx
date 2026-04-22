@@ -1,45 +1,119 @@
-import { AppBar, Box, Button, Toolbar, Typography } from "@mui/material";
-import { useNavigate } from "react-router";
-import { Outlet } from "react-router-dom";
+import { Box, Typography, Chip } from "@mui/material";
+import { useNavigate, Outlet } from "react-router-dom";
+import { useAppSelector } from "../hooks/useAppSelector";
+import logo from "../assets/logo.jpeg";
 
 const MainMenu = () => {
-  const nav = useNavigate();
-    return (
-        <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
+  const navigate = useNavigate();
 
-      {/* 🔥 NAVBAR */}
-      <AppBar position="static" color="transparent" elevation={0}>
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          
-          {/* LEFT: TITLE */}
-          <Typography variant="h6">
-            Lokanata POS
-          </Typography>
+  // ambil user dari redux (lebih aman)
+  const { user } = useAppSelector(state => state.auth);
+  const role = user?.role;
 
-          {/* RIGHT: NAV BUTTONS */}
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <Button onClick={() => nav("/products")}>
-              Product Management
-            </Button>
+  return (
+    <>
+      {/* 🔝 NAVBAR */}
+      <Box
+        sx={{
+          px: 3,
+          py: 2.5,
+          display: "flex",
+          alignItems: "center",
+          border: "1px solid #D7D4B1",
+          borderRadius: "12px",
+          gap: 3,
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
+          bgcolor: "#D8EBF9",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
+        }}
+      >
+        {/* Logo */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            mr: 2,
+            cursor: "pointer"
+          }}
+        >
+          <img
+            src={logo}
+            alt="logo"
+            style={{
+              width: "50px",
+              height: "50px",
+              objectFit: "contain",
+              borderRadius: "50%"
+            }}
+          />
+        </Box>
 
-            <Button onClick={() => nav("/cashier")}>
-              Cashier
-            </Button>
+        {/* POS BUTTON */}
+        <Typography
+          onClick={() => navigate("/pos")}
+          sx={{
+            fontSize: 13,
+            cursor: "pointer",
+            color: "#7a6a58",
+            fontWeight: 600,
+            letterSpacing: 0.3,
+            transition: "all 0.2s",
+            "&:hover": {
+              color: "#513229"
+            }
+          }}
+        >
+          POS
+        </Typography>
 
-            <Button color="error" onClick={() => nav("/")}>
-              Logout
-            </Button>
-          </Box>
+        <Typography
+          onClick={() => navigate("/products")}
+          sx={{
+            fontSize: 13,
+            cursor: "pointer",
+            color: "#7a6a58",
+            fontWeight: 600,
+            letterSpacing: 0.3,
+            transition: "all 0.2s",
+            "&:hover": {
+              color: "#513229"
+            }
+          }}
+        >
+          Product Management
+        </Typography>
 
-        </Toolbar>
-      </AppBar>
 
-      {/* 🔥 PAGE CONTENT */}
-      <Box sx={{ p: 3 }}>
-        <Outlet />
+
+
+
+        <Box sx={{ flex: 1 }} />
+
+        {/* ROLE CHIP */}
+        <Chip
+          label={role ?? "GUEST"}
+          size="small"
+          sx={{
+            bgcolor: "#fce6b7",
+            border: "1px solid #51322920",
+            color: "#513229",
+            fontSize: 11,
+            height: 30,
+            fontWeight: 700,
+            borderRadius: "8px",
+            textTransform: "uppercase"
+          }}
+        />
       </Box>
 
-    </Box>
-    );
-}
+      {/* 🔥 PAGE CONTENT MASUK SINI */}
+      <Box sx={{ p: 2 }}>
+        <Outlet />
+      </Box>
+    </>
+  );
+};
+
 export default MainMenu;

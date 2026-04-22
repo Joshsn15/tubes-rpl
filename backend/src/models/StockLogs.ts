@@ -23,7 +23,7 @@ export class StockLogs extends Model {
 
     @Column({
         type: DataType.ENUM('IN', 'OUT', 'ADJUST'),
-        allowNull: true,
+        allowNull: false,
     })
     declare change_type: 'IN' | 'OUT' | 'ADJUST';
 
@@ -34,7 +34,7 @@ export class StockLogs extends Model {
     declare stock_qty: number;
 
     @Column({
-        type: DataType.ENUM('SALE', 'PURCHASE'),
+        type: DataType.ENUM('SALE', 'PURCHASE', 'ADJUST', 'RETURN'),
         allowNull: true,
     })
     declare reference_type: 'SALE' | 'PURCHASE';

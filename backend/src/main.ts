@@ -12,6 +12,7 @@ import { PurchaseOrders } from "./models/PurchaseOrders";
 import { PurchaseOrderItems } from "./models/PurchaseOrderItems";
 import { StockLogs } from "./models/StockLogs";
 
+
 // ROUTES
 import registerRoute from "./routes/registerRoutes";
 import loginRoute from "./routes/loginRoutes";
@@ -22,10 +23,16 @@ import adminRoute from "./routes/adminRoutes";
 import { StockReports } from "./models/StockReports";
 import { Ledger } from "./models/Ledger";
 
+
+import posRoutes from "./routes/pos.routes";
+import productRoutes from "./routes/product.routes";
+
 const app = express();
 app.use(express.json());
-app.use(cors())
-const sequelize = new Sequelize({
+app.use(cors());
+
+// 🔥 INIT SEQUELIZE FIRST
+export const sequelize = new Sequelize({
   username: appConfig.database.username,
   password: appConfig.database.password,
   host: appConfig.database.host,
@@ -55,6 +62,8 @@ sequelize.authenticate()
   .then(() => {
     console.log("DB SYNCED ✅");
 
+    console.log("REGISTERING ROUTES 🔥");
+
     // ✅ NOW register routes
     app.use("/api", registerRoute);
     app.use("/api", loginRoute);
@@ -62,6 +71,8 @@ sequelize.authenticate()
     app.use("/api/stock",stockRoute);
     app.use("/api/ledger",ledgerRoute);
     app.use("/api/admin",adminRoute);
+    app.use("/api", posRoutes);
+    app.use("/api/products", productRoutes);
     app.listen(3000, () => {
       console.log("Server running on port 3000");
     });

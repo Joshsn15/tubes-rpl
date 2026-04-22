@@ -1,10 +1,8 @@
 export type Role = "manager" | "admin" | "employee" | "stocker";
-
 export interface NavItem {
   label: string;
   path: string;
 }
-
 export const NAV_CONFIG: Record<Role, NavItem[]> = {
   manager: [
     { label: "Dashboard", path: "/manager" },
