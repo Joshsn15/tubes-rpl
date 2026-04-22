@@ -1,32 +1,39 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, Button, Paper, Stack } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Paper,
+  Stack
+} from "@mui/material";
 import { useAppSelector } from "../hooks/useAppSelector";
 import { getProducts, checkout } from "../services/pos.api";
 import type { Product, CartItem } from "../types/pos";
 
 const POS = () => {
-  const { user, token } = useAppSelector(state => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
 
   const [products, setProducts] = useState<Product[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedPayment, setSelectedPayment] = useState("");
 
-  // 🔥 auth guard (prevents weird blank / redirect loops)
   useEffect(() => {
     if (!user) return;
-    
+
     getProducts()
       .then(setProducts)
       .finally(() => setLoading(false));
   }, [user]);
 
-  // ➕ add to cart
   const addToCart = (product: Product) => {
-    setCart(prev => {
-      const existing = prev.find(p => p.products_id === product.products_id);
+    setCart((prev) => {
+      const existing = prev.find(
+        (p) => p.products_id === product.products_id
+      );
 
       if (existing) {
-        return prev.map(p =>
+        return prev.map((p) =>
           p.products_id === product.products_id
             ? { ...p, qty: p.qty + 1 }
             : p
@@ -45,23 +52,49 @@ const POS = () => {
     });
   };
 
-  // ➖ remove
   const removeItem = (id: string) => {
-    setCart(prev => prev.filter(c => c.products_id !== id));
+    setCart((prev) =>
+      prev.filter((c) => c.products_id !== id)
+    );
   };
 
-  // 💸 checkout (NOW AUTH SAFE)
   const handleCheckout = async () => {
     try {
-      if (!token) throw new Error("No auth token");
+      if (!selectedPayment) {
+        throw new Error("Please select a payment method");
+      }
 
-      const res = await checkout(cart, token);
+      const res = await checkout(cart, selectedPayment);
 
-      alert(`Success! Total: ${res.total}`);
+      alert(
+        `Success!\nPayment: ${selectedPayment}\nTotal: Rp${res.total}`
+      );
+
+      // update stock locally
+      setProducts((prevProducts) =>
+        prevProducts.map((product) => {
+          const purchasedItem = cart.find(
+            (item) =>
+              item.products_id === product.products_id
+          );
+
+          if (!purchasedItem) return product;
+
+          return {
+            ...product,
+            stock: product.stock - purchasedItem.qty
+          };
+        })
+      );
+
       setCart([]);
+      setSelectedPayment("");
     } catch (err: unknown) {
-      if (err instanceof Error) alert(err.message);
-      else alert("Error");
+      if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert("Error");
+      }
     }
   };
 
@@ -70,7 +103,6 @@ const POS = () => {
     0
   );
 
-  // 🔥 BLOCK UI if not logged in
   if (!user) {
     return (
       <Box p={3}>
@@ -90,61 +122,136 @@ const POS = () => {
   }
 
   return (
-    <Box sx={{ p: 3, display: "flex", gap: 3 }}>
-
-      {/* LEFT: PRODUCTS */}
-      <Paper sx={{ p: 2, width: "60%" }}>
-        <Typography variant="h6" mb={2}>
+    <Box
+      sx={{
+        p: 3,
+        display: "flex",
+        gap: 3,
+        minHeight: "100vh",
+        bgcolor: "background.default"
+      }}
+    >
+      {/* LEFT SIDE - PRODUCTS */}
+      <Paper
+        sx={{
+          p: 3,
+          width: "60%",
+          bgcolor: "background.paper",
+          border: "1px solid",
+          borderColor: "divider"
+        }}
+      >
+        <Typography variant="h5" mb={3}>
           Products
         </Typography>
 
-        <Stack spacing={1}>
+        <Stack spacing={2}>
           {products.map((p) => (
             <Button
               key={p.products_id}
               variant="contained"
+              color="secondary"
               onClick={() => addToCart(p)}
               disabled={p.stock === 0}
+              sx={{
+                justifyContent: "space-between",
+                py: 1.5,
+                fontWeight: 600
+              }}
             >
-              {p.products_name} - Rp{p.price} (Stock: {p.stock})
+              {p.products_name} - Rp{p.price}
+              (Stock: {p.stock})
             </Button>
           ))}
         </Stack>
       </Paper>
 
-      {/* RIGHT: CART */}
-      <Paper sx={{ p: 2, width: "40%" }}>
-        <Typography variant="h6" mb={2}>
+      {/* RIGHT SIDE - CART */}
+      <Paper
+        sx={{
+          p: 3,
+          width: "40%",
+          bgcolor: "background.paper",
+          border: "1px solid",
+          borderColor: "divider"
+        }}
+      >
+        <Typography variant="h5" mb={3}>
           Cart
         </Typography>
 
         {cart.length === 0 ? (
-          <Typography>No items</Typography>
+          <Typography color="text.secondary">
+            No items selected
+          </Typography>
         ) : (
-          <Stack spacing={1}>
+          <Stack spacing={2}>
             {cart.map((item) => (
               <Box
                 key={item.products_id}
-                sx={{ display: "flex", justifyContent: "space-between" }}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  p: 1,
+                  borderBottom: "1px solid",
+                  borderColor: "divider"
+                }}
               >
                 <Typography>
                   {item.products_name} x{item.qty}
                 </Typography>
 
-                <Button onClick={() => removeItem(item.products_id)}>
-                  ❌
+                <Button
+                  size="small"
+                  color="error"
+                  onClick={() =>
+                    removeItem(item.products_id)
+                  }
+                >
+                  Remove
                 </Button>
               </Box>
             ))}
           </Stack>
         )}
 
-        <Typography mt={2}>Total: Rp{total}</Typography>
+        <Typography mt={3} mb={2} fontWeight={600}>
+          Payment Method
+        </Typography>
+
+        <Stack direction="row" spacing={1} flexWrap="wrap">
+          {["CASH", "DEBIT", "CREDIT", "QRIS"].map((method) => (
+            <Button
+              key={method}
+              variant={
+                selectedPayment === method
+                  ? "contained"
+                  : "outlined"
+              }
+              onClick={() => setSelectedPayment(method)}
+              sx={{
+                minWidth: "90px"
+              }}
+            >
+              {method}
+            </Button>
+          ))}
+        </Stack>
+
+        <Typography
+          mt={3}
+          fontWeight={700}
+          variant="h6"
+        >
+          Total: Rp{total}
+        </Typography>
 
         <Button
           fullWidth
           variant="contained"
-          sx={{ mt: 2 }}
+          color="primary"
+          sx={{ mt: 3 }}
           onClick={handleCheckout}
           disabled={cart.length === 0}
         >

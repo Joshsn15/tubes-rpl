@@ -1,6 +1,7 @@
 import { Box, Typography, Chip } from "@mui/material";
 import { useNavigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "../hooks/useAppSelector";
+import logo from "../assets/logo.jpeg";
 
 const MainMenu = () => {
   const navigate = useNavigate();
@@ -37,12 +38,14 @@ const MainMenu = () => {
             cursor: "pointer"
           }}
         >
-          <Box
-            sx={{
-              width: 50,
-              height: 50,
-              borderRadius: "50%",
-              bgcolor: "#51322910"
+          <img
+            src={logo}
+            alt="logo"
+            style={{
+              width: "50px",
+              height: "50px",
+              objectFit: "contain",
+              borderRadius: "50%"
             }}
           />
         </Box>

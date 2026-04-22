@@ -4,7 +4,7 @@
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.createTable('transaction_items', {
-            transcation_item_id: {
+            transaction_item_id: {
                 type: Sequelize.UUID,
                 defaultValue: Sequelize.UUIDV4,
                 allowNull: false,

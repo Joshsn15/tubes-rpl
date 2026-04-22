@@ -33,35 +33,25 @@ export class Transactions extends Model {
     allowNull: false,
     unique: true
   })
-  transaction_code!: string;
-
-  @ForeignKey(() => Users)
-  @Column({
-    type: DataType.UUID,
-    allowNull: false
-  })
-  cashier_id!: string;
-
-  @BelongsTo(() => Users)
-  cashier!: Users;
+  declare transaction_code : string;
 
   @Column({
     type: DataType.DECIMAL(12, 2),
     allowNull: false
   })
-  total_price!: number;
+  declare total_price : number;
 
   @Column({
     type: DataType.ENUM("CASH","DEBIT","CREDIT","QRIS"),
     allowNull: false
   })
-  payment_method!: "CASH" | "DEBIT" | "CREDIT" | "QRIS";
+  declare payment_method : "CASH" | "DEBIT" | "CREDIT" | "QRIS";
 
   @Column({
     type: DataType.DATE,
     defaultValue: DataType.NOW
   })
-  transaction_date!: Date;
+  declare transaction_date : Date;
 
   @CreatedAt
   declare createdAt: Date;

@@ -10,23 +10,34 @@ export const getProducts = async () => {
 };
 
 // 💸 checkout
-export const checkout = async (cart: CartItem[]) => {
-  const res = await fetch(`http://localhost:3000/api/pos/checkout`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      cart: cart.map((c) => ({
-        products_id: c.products_id,
-        qty: c.qty,
-      })),
-    }),
-  });
+export const checkout = async (
+  cart: CartItem[],
+  paymentMethod: string
+) => {
+  const res = await fetch(
+    `http://localhost:3000/api/pos/checkout`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        payment_method: paymentMethod,
+        cart: cart.map((c) => ({
+          products_id: c.products_id,
+          qty: c.qty,
+        })),
+      }),
+    }
+  );
 
   const data = await res.json();
 
-  if (!res.ok) throw new Error(data.message || "Checkout failed");
+  if (!res.ok) {
+    throw new Error(
+      data.message || "Checkout failed"
+    );
+  }
 
   return data;
 };
@@ -46,7 +57,11 @@ export const updateProductPrice = async (
     body: JSON.stringify({ price })
   });
 
-  if (!res.ok) throw new Error("Failed to update");
+  const data = await res.json();
 
-  return res.json();
+  if (!res.ok) {
+    throw new Error(data.message || "Failed to update");
+  }
+
+  return data;
 };

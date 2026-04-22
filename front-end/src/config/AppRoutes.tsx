@@ -21,12 +21,12 @@ export default function AppRoutes() {
         {/* PUBLIC */}
         <Route
           path="/login"
-          element={!user ? <Login /> : <Navigate to="/pos" />}
+          element={!user ? <Login /> : <Navigate to="/" />}
         />
 
         <Route
           path="/register"
-          element={!user ? <Register /> : <Navigate to="/pos" />}
+          element={!user ? <Register /> : <Navigate to="/login" />}
         />
 
         {/* 🔥 PROTECTED LAYOUT */}
@@ -35,7 +35,7 @@ export default function AppRoutes() {
           element={user ? <MainMenu /> : <Navigate to="/login" />}
         >
           {/* default page */}
-          <Route index element={<Navigate to="pos" />} />
+          <Route index element={<Navigate to="/pos" />} />
 
           {/* POS inside MainMenu */}
           <Route path="pos" element={<POS />} />

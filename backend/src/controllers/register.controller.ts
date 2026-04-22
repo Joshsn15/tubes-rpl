@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { Users } from "../Models/Users";
+import { Users } from "../models/Users";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -29,6 +29,8 @@ export const register = async (req: Request, res: Response) => {
         message: "Password must be at least 6 characters"
       });
     }
+
+    console.log("Sequelize instance:", Users.sequelize);
 
     // 🔍 CHECK DUPLICATE EMAIL
     const existingUser = await Users.findOne({

@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { Users } from "../Models/Users";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { sequelize } from "../db/sequelize";
+const Users = sequelize.models.Users;
 
 dotenv.config();
 
