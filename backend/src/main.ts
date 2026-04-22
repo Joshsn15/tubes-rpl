@@ -20,6 +20,7 @@ import stockRoute from "./routes/stockRoutes";
 import ledgerRoute from "./routes/ledgerRoutes";
 import adminRoute from "./routes/adminRoutes";
 import { StockReports } from "./models/StockReports";
+import { Ledger } from "./models/Ledger";
 
 const app = express();
 app.use(express.json());
@@ -40,7 +41,8 @@ const sequelize = new Sequelize({
     PurchaseOrders,
     PurchaseOrderItems,
     StockLogs,
-    StockReports
+    StockReports,
+    Ledger
   ]
 });
 

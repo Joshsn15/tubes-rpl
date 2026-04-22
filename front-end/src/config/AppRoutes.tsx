@@ -9,7 +9,7 @@ import { earthTheme } from "../themes/themes";
 import ManagerDashboard from "../pages/ManagerPage/ManagerDashboard";
 import EditProducts from "../pages/ManagerPage/EditProducts";
 import FinancialReports from "../pages/ManagerPage/FinancialReports";
-import ApprovalPage from "../pages/ManagerPage/ApprovalPage";
+import StockReport from "../pages/ManagerPage/StockReport";
 import AddProduct from "../pages/ManagerPage/AddProductPage";
 
 
@@ -26,46 +26,46 @@ const StockPage = lazy(() => import("../pages/StockerPage/stockPage"));
 const EmployeeCRUD = lazy(() => import("../pages/AdminPage/employeePage"));
 // ── App ────────────────────────────────────────────────────────────────────
 export default function AppRoutes() {
-    return (
-        <ThemeProvider theme={earthTheme}>
-            <CssBaseline />
-            <Routes>
+  return (
+    <ThemeProvider theme={earthTheme}>
+      <CssBaseline />
+      <Routes>
 
-                {/* ── MANAGER ── */}
-                <Route element={<RoleLayout role="manager" />}>
-                    <Route path="/manager" element={<ManagerDashboard />} />
-                    <Route path="/manager/financialReports" element={<FinancialReports />} />
-                    <Route path="/manager/edit/:id" element={<EditProducts />} />
-                    <Route path="/manager/approval" element={<ApprovalPage />} />
-                    <Route path="/manager/add-product" element={<AddProduct />} />
-                </Route>
+        {/* ── MANAGER ── */}
+        <Route element={<RoleLayout role="manager" />}>
+          <Route path="/manager" element={<ManagerDashboard />} />
+          <Route path="/manager/financialReports" element={<FinancialReports />} />
+          <Route path="/manager/edit/:id" element={<EditProducts />} />
+          <Route path="/manager/stock-reports" element={<StockReport />} />
+          <Route path="/manager/add-product" element={<AddProduct />} />
+        </Route>
 
-                {/* ── ADMIN ── */}
-                <Route element={<RoleLayout role="admin" />}>
-                    <Route path="/employee" element={<EmployeeCRUD />} />
+        {/* ── ADMIN ── */}
+        <Route element={<RoleLayout role="admin" />}>
+          <Route path="/employee" element={<EmployeeCRUD />} />
 
-                </Route>
+        </Route>
 
-                {/* ── EMPLOYEE ── */}
-                <Route>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/" element={<MainMenu />} />
-                </Route>
+        {/* ── EMPLOYEE ── */}
+        <Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<MainMenu />} />
+        </Route>
 
 
-                {/* ── STOCKER ── */}
-                <Route element={<RoleLayout role="stocker" />}>
-                        <Route path="/form" element={<FormLaporan />} />
-                        <Route path="/receival" element={<ReceivalBarang />} />
-                        <Route path="/stock" element={<StockPage />} />
+        {/* ── STOCKER ── */}
+        <Route element={<RoleLayout role="stocker" />}>
+          <Route path="/form" element={<FormLaporan />} />
+          <Route path="/receival" element={<ReceivalBarang />} />
+          <Route path="/stock" element={<StockPage />} />
 
-                </Route>
-            </Routes>
+        </Route>
+      </Routes>
 
-            <style>{`
+      <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap');
       `}</style>
-        </ThemeProvider>
-    );
+    </ThemeProvider>
+  );
 }

@@ -15,27 +15,27 @@ import {
   TextField,
 } from "@mui/material";
 import { TrendingUp, TrendingDown, BarChart } from "@mui/icons-material";
+import { getLedgerFromToWhere } from "../../services/pos.api";
 
 type LedgerItem = {
-  date: string;
-  type: "SALE" | "PURCHASE";
-  debit: number;
-  credit: number;
+  ledger_id: string;
+  reference_type: "SALE" | "PURCHASE";
+  debit: string;
+  credit: string;
+  transaction_id: string;
+  po_id: string;
+  transactions: {
+    transaction_code: string;
+    total_price: string;
+    payment_method: string;
+    transaction_date: string;
+  };
+  purchase_order: {
+    total_cost: string;
+    status: string;
+  };
 };
 
-// ── All dummy data ─────────────────────────────────────────────────────────
-const ALL_LEDGER: LedgerItem[] = [
-  { date: "2026-03-15", type: "SALE",     debit: 0,      credit: 45000 },
-  { date: "2026-03-20", type: "PURCHASE", debit: 25000,  credit: 0     },
-  { date: "2026-04-01", type: "SALE",     debit: 0,      credit: 50000 },
-  { date: "2026-04-02", type: "PURCHASE", debit: 30000,  credit: 0     },
-  { date: "2026-04-03", type: "SALE",     debit: 0,      credit: 70000 },
-  { date: "2026-04-04", type: "PURCHASE", debit: 20000,  credit: 0     },
-  { date: "2026-04-10", type: "SALE",     debit: 0,      credit: 90000 },
-  { date: "2026-04-15", type: "PURCHASE", debit: 40000,  credit: 0     },
-  { date: "2026-05-01", type: "SALE",     debit: 0,      credit: 60000 },
-  { date: "2026-05-03", type: "PURCHASE", debit: 15000,  credit: 0     },
-];
 
 const fmt = (n: number) =>
   new Intl.NumberFormat("id-ID", {
@@ -51,14 +51,14 @@ const fmtDate = (d: string) =>
 
 // ── Colors ─────────────────────────────────────────────────────────────────
 const BG_SURFACE = "#261D17";
-const BG_RAISED  = "#221A14";
-const BG_HOVER   = "#2E2018";
-const BORDER     = "#36261C";
+const BG_RAISED = "#221A14";
+const BG_HOVER = "#2E2018";
+const BORDER = "#36261C";
 const BORDER_MID = "#4A3428";
-const BAY        = "#FCE6B7";
-const SB         = "#D8EBF9";
-const LD         = "#F4F1E2";
-const TEXT_HINT  = "#5A4438";
+const BAY = "#FCE6B7";
+const SB = "#D8EBF9";
+const LD = "#F4F1E2";
+const TEXT_HINT = "#5A4438";
 
 const inputSx = {
   "& .MuiOutlinedInput-root": {
@@ -73,9 +73,12 @@ const inputSx = {
   "& input": { color: LD, colorScheme: "dark" },
 };
 
+
+
+
 export default function FinancialReportPage() {
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate]     = useState("");
+  const [endDate, setEndDate] = useState("");
   const [report, setReport] = useState<{
     income: number;
     expense: number;
@@ -83,24 +86,25 @@ export default function FinancialReportPage() {
     ledger: LedgerItem[];
   } | null>(null);
 
-  const handleGenerate = () => {
-    // buat filter day 
-    const filtered = ALL_LEDGER.filter((item) => {
-      const itemDate = new Date(item.date);
-      const from     = startDate ? new Date(startDate) : null;
-      const to       = endDate   ? new Date(endDate)   : null;
+  const handleGenerate = async () => {
+    if(startDate == null || endDate == null) {
+      return alert("Tanggal tidak valid");
+    }
+    try {
+      const data = await getLedgerFromToWhere(startDate, endDate);
+      const ledger: LedgerItem[] = data; // atau data.data
 
-      if (from && itemDate < from) return false;
-      if (to   && itemDate > to)   return false;
-      return true;
-    });
-
-    const income  = filtered.reduce((acc, i) => acc + i.credit, 0);
-    const expense = filtered.reduce((acc, i) => acc + i.debit,  0);
-    const profit  = income - expense;
-
-    setReport({ income, expense, profit, ledger: filtered });
+      const income = ledger.reduce((acc, i) => acc + Number(i.credit), 0);
+      const expense = ledger.reduce((acc, i) => acc + Number(i.debit), 0);
+      const profit = income - expense;
+      console.log(data)
+      setReport({ income, expense, profit, ledger });
+    } catch (err) {
+      console.error("ERROR:", err);
+    }
   };
+
+
 
   return (
     <Box sx={{ p: 3, maxWidth: 900, mx: "auto" }}>
@@ -163,7 +167,7 @@ export default function FinancialReportPage() {
         <>
           {/* Summary cards */}
           <Box sx={{ display: "flex", gap: 1.5, mb: 3, flexWrap: "wrap" }}>
-            
+
             {/* Income */}
             <Card sx={{ flex: 1, minWidth: 160, background: BG_SURFACE, border: `1px solid ${BORDER}`, borderTop: `2px solid #D8EBF9`, boxShadow: "none" }}>
               <CardContent sx={{ p: "14px 16px !important" }}>
@@ -227,28 +231,28 @@ export default function FinancialReportPage() {
                         sx={{ "&:hover td": { background: BG_HOVER }, transition: "background .15s" }}
                       >
                         <TableCell sx={{ borderColor: BORDER, color: LD, fontSize: 12 }}>
-                          {fmtDate(item.date)}
+                          {fmtDate(item.transactions.transaction_date)}
                         </TableCell>
                         <TableCell sx={{ borderColor: BORDER }}>
                           <Chip
-                            label={item.type}
+                            label={item.reference_type}
                             size="small"
                             sx={{
                               height: 20,
                               fontSize: 9,
                               fontWeight: 700,
                               borderRadius: "6px",
-                              ...(item.type === "SALE"
+                              ...(item.reference_type === "SALE"
                                 ? { background: "#1A2830", color: SB, border: `1px solid #253848` }
                                 : { background: "#3A1810", color: "#F0A080", border: `1px solid #4A2818` }),
                             }}
                           />
                         </TableCell>
-                        <TableCell sx={{ borderColor: BORDER, color: item.debit > 0 ? "#B05040" : TEXT_HINT, fontSize: 12, fontWeight: item.debit > 0 ? 600 : 400 }}>
-                          {item.debit > 0 ? fmt(item.debit) : "—"}
+                        <TableCell sx={{ borderColor: BORDER, color: item.debit.length > 0 ? "#B05040" : TEXT_HINT, fontSize: 12, fontWeight: item.debit.length > 0 ? 600 : 400 }}>
+                          {item.debit.length > 0 ? fmt(parseFloat(item.debit)) : "—"}
                         </TableCell>
-                        <TableCell sx={{ borderColor: BORDER, color: item.credit > 0 ? SB : TEXT_HINT, fontSize: 12, fontWeight: item.credit > 0 ? 600 : 400 }}>
-                          {item.credit > 0 ? fmt(item.credit) : "—"}
+                        <TableCell sx={{ borderColor: BORDER, color: item.credit.length > 0 ? SB : TEXT_HINT, fontSize: 12, fontWeight: item.credit.length > 0 ? 600 : 400 }}>
+                          {item.credit.length > 0 ? fmt(parseFloat(item.credit)) : "—"}
                         </TableCell>
                       </TableRow>
                     ))}

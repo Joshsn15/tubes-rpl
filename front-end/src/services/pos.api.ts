@@ -92,3 +92,13 @@ export const updateProductPrice = async (
 
     return res.json();
 };
+
+export const getLedgerFromToWhere = async (startDate?: string, endDate?: string) => {
+    const params = new URLSearchParams();
+    if (startDate) params.append("startDate", startDate);
+    if (endDate) params.append("endDate", endDate);
+
+    const res = await fetch(`http://localhost:3000/api/ledger?${params}`);
+    if (!res.ok) throw new Error("Failed to fetch ledger");
+    return res.json();
+};

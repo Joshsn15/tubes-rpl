@@ -4,12 +4,17 @@ import {
   Model,
   DataType,
   PrimaryKey,
-  CreatedAt, UpdatedAt, DeletedAt
+  CreatedAt, UpdatedAt, DeletedAt,
+  BelongsTo,
+  ForeignKey
 } from "sequelize-typescript";
+import { PurchaseOrders } from "./PurchaseOrders";
+import { Transactions } from "./Transactions";
 
 @Table({
   tableName: "ledger",
-  timestamps: false
+  timestamps: false,
+  paranoid: true
 })
 export class Ledger extends Model {
   @PrimaryKey
@@ -47,6 +52,22 @@ export class Ledger extends Model {
   })
   declare credit: number;
 
+  // FK ke transactions
+  @ForeignKey(() => Transactions)
+  @Column({ type: DataType.UUID, allowNull: false })
+  declare transaction_id: string;
+
+  @BelongsTo(() => Transactions)
+  declare transactions: Transactions;
+
+  // FK ke purchase_orders
+  @ForeignKey(() => PurchaseOrders)
+  @Column({ type: DataType.UUID, allowNull: false })
+  declare po_id: string;
+
+   @BelongsTo(() => PurchaseOrders)
+  declare purchase_order: PurchaseOrders;
+  
   @CreatedAt
     declare createdAt: Date;
 
