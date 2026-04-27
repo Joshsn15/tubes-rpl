@@ -49,7 +49,7 @@ export const register = async (req: Request, res: Response) => {
       username,
       email,
       password: hashedPassword,
-      role: "STOCKER" 
+      role: "EMPLOYEE" 
     });
 
     return res.status(201).json({

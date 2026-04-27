@@ -236,6 +236,7 @@ export default function FinancialReportPage() {
                           {h}
                         </TableCell>
                       ))}
+                      
                     </TableRow>
                   </TableHead>
                   <TableBody>

@@ -1,8 +1,10 @@
 import { useLocation, useNavigate } from "react-router";
-import { Box, Typography, Chip } from "@mui/material";
+import { Box, Typography, Chip, Button } from "@mui/material";
 import { NAV_CONFIG, ROLE_META } from "../types/nav.types";
 import type { Role } from "../types/nav.types";
 import logo from "../assets/logo.png";
+import { logout } from "../store/authSlice";
+import { useDispatch } from "react-redux";
 interface NavbarProps {
   role: Role;
 }
@@ -10,9 +12,13 @@ interface NavbarProps {
 export default function Navbar({ role }: NavbarProps) {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const navItems = NAV_CONFIG[role];
   const meta = ROLE_META[role];
-
+   const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login"); // redirect after logout
+  };
   return (
     <Box
       sx={{
@@ -49,13 +55,13 @@ export default function Navbar({ role }: NavbarProps) {
             justifyContent: "center",
             borderRadius: "50%",
             overflow: "hidden",
-            bgcolor: "#51322910" 
+            bgcolor: "#51322910"
           }}
         >
           <img src={logo} alt="logo" style={{
             width: "100%",
             height: "100%",
-            objectFit: "cover" 
+            objectFit: "cover"
           }} />
         </Box>
       </Box>
@@ -100,7 +106,23 @@ export default function Navbar({ role }: NavbarProps) {
       })}
 
       <Box sx={{ flex: 1 }} />
-
+      <Button
+        onClick={handleLogout}
+        variant="contained"
+        size="small"
+        sx={{
+          bgcolor: "#fce6b7",
+          textTransform: "none",
+          fontSize: 12,
+          borderRadius: "8px",
+          px: 2,
+          "&:hover": {
+            bgcolor: "#3b241d"
+          }
+        }}
+      >
+        Logout
+      </Button>
       {/* Role Badge */}
       <Chip
         label={meta.label}
