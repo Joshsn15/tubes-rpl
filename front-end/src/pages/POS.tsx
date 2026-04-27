@@ -70,21 +70,23 @@ const POS = () => {
         `Success!\nPayment: ${selectedPayment}\nTotal: Rp${res.total}`
       );
 
-      setProducts((prevProducts) =>
-        prevProducts.map((product) => {
-          const purchasedItem = cart.find(
-            (item) =>
-              item.products_id === product.products_id
-          );
+      // setProducts((prevProducts) =>
+      //   prevProducts.map((product) => {
+      //     const purchasedItem = cart.find(
+      //       (item) =>
+      //         item.products_id === product.products_id
+      //     );
 
-          if (!purchasedItem) return product;
+      //     if (!purchasedItem) return product;
 
-          return {
-            ...product,
-            stock: product.stock - purchasedItem.qty
-          };
-        })
-      );
+      //     return {
+      //       ...product,
+      //       stock: product.stock - purchasedItem.qty
+      //     };
+      //   })
+      // );
+      const updatedProducts = await getProducts();
+      setProducts(updatedProducts);
 
       setCart([]);
       setSelectedPayment("");

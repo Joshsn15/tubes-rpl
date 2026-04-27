@@ -1,6 +1,5 @@
 'use strict';
 
-// ── UUID constants ─────────────────────────────────────────────────────────
 const SUPPLIER_1 = 'aaaa0001-0000-0000-0000-000000000001';
 const SUPPLIER_2 = 'aaaa0001-0000-0000-0000-000000000002';
 
@@ -9,14 +8,11 @@ const USER_2 = 'bbbb0002-0000-0000-0000-000000000002';
 const USER_3 = 'bbbb0002-0000-0000-0000-000000000003';
 const USER_4 = 'bbbb0002-0000-0000-0000-000000000004';
 
-const CUSTOMER_1 = 'cccc0003-0000-0000-0000-000000000001';
-const CUSTOMER_2 = 'cccc0003-0000-0000-0000-000000000002';
-
-const PRODUCT_1 = '0ff1736b-6ef0-424e-92e0-9e247d56710a'; // Indomie Goreng
-const PRODUCT_2 = '390f63b1-ccc4-49cf-9462-309d80344a29'; // Aqua Botol 600ml
-const PRODUCT_3 = '1bee16a9-fc8a-4869-8629-2f5ccd38cc3c'; // Vitamin C 500mg
-const PRODUCT_4 = 'afc36e5e-cbed-4119-8f0d-9fe0875b015d'; // Sabun Lifebuoy
-const PRODUCT_5 = '39dd1da3-3694-4f26-97d4-fc20524561f7'; // Teh Botol Sosro
+const PRODUCT_1 = '0ff1736b-6ef0-424e-92e0-9e247d56710a';
+const PRODUCT_2 = '390f63b1-ccc4-49cf-9462-309d80344a29';
+const PRODUCT_3 = '1bee16a9-fc8a-4869-8629-2f5ccd38cc3c';
+const PRODUCT_4 = 'afc36e5e-cbed-4119-8f0d-9fe0875b015d';
+const PRODUCT_5 = '39dd1da3-3694-4f26-97d4-fc20524561f7';
 
 const PO_1 = 'eeee0005-0000-0000-0000-000000000001';
 const PO_2 = 'eeee0005-0000-0000-0000-000000000002';
@@ -39,13 +35,19 @@ const TRX_ITEM_3 = 'bbbb0009-0000-0000-0000-000000000003';
 const LEDGER_1 = 'dddd0010-0000-0000-0000-000000000001';
 const LEDGER_2 = 'dddd0010-0000-0000-0000-000000000002';
 
+const REPORT_1 = 'eeee0011-0000-0000-0000-000000000001';
+const REPORT_2 = 'eeee0011-0000-0000-0000-000000000002';
+
 const NOW = new Date();
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
 
-        // ── 1. suppliers ──────────────────────────────────────────────────
+        // ─────────────────────────────────────────
+        // 1. Suppliers
+        //    Model: suppliers_id (UUID), name, contact_phone
+        //    Note: no paranoid (no deletedAt)
+        // ─────────────────────────────────────────
         await queryInterface.bulkInsert('Suppliers', [
             {
                 suppliers_id: SUPPLIER_1,
@@ -53,7 +55,6 @@ module.exports = {
                 contact_phone: '02157900000',
                 createdAt: NOW,
                 updatedAt: NOW,
-                deletedAt: null,
             },
             {
                 suppliers_id: SUPPLIER_2,
@@ -61,12 +62,15 @@ module.exports = {
                 contact_phone: '02157911111',
                 createdAt: NOW,
                 updatedAt: NOW,
-                deletedAt: null,
             },
         ]);
 
-        // ── 2. users ──────────────────────────────────────────────────────
-        // password di bawah adalah bcrypt hash dari "password123"
+        // ─────────────────────────────────────────
+        // 2. Users
+        //    Model: user_id (UUID), username, email, password,
+        //           role ENUM('ADMIN','MANAGER','STOCKER','EMPLOYEE'), paranoid
+        //    Password hash = "secret" via bcrypt cost 10
+        // ─────────────────────────────────────────
         await queryInterface.bulkInsert('Users', [
             {
                 user_id: USER_1,
@@ -110,29 +114,12 @@ module.exports = {
             },
         ]);
 
-        // ── 3. customer ───────────────────────────────────────────────────
-        await queryInterface.bulkInsert('customer', [
-            {
-                customer_id: CUSTOMER_1,
-                name: 'Budi Santoso',
-                email: 'budi@gmail.com',
-                phone: '08123456789',
-                createdAt: NOW,
-                updatedAt: NOW,
-                deletedAt: null,
-            },
-            {
-                customer_id: CUSTOMER_2,
-                name: 'Siti Rahayu',
-                email: 'siti@gmail.com',
-                phone: '08987654321',
-                createdAt: NOW,
-                updatedAt: NOW,
-                deletedAt: null,
-            },
-        ]);
-
-        // ── 4. products ───────────────────────────────────────────────────
+        // ─────────────────────────────────────────
+        // 3. Products
+        //    Model: products_id (UUID), products_name, category ENUM('FOOD','DRINK','HEALTH','BEAUTY'),
+        //           price DECIMAL(12,2), stock INTEGER, manufacture_date DATE,
+        //           expiry_date DATE, paranoid
+        // ─────────────────────────────────────────
         await queryInterface.bulkInsert('Products', [
             {
                 products_id: PRODUCT_1,
@@ -196,12 +183,16 @@ module.exports = {
             },
         ]);
 
-        // ── 5. purchase_orders ────────────────────────────────────────────
+        // ─────────────────────────────────────────
+        // 4. Purchase Orders
+        //    Model: po_id (UUID), suppliers_id (UUID FK), total_cost DECIMAL(12,2),
+        //           status ENUM('PENDING','RECEIVED','CANCELED'), paranoid
+        // ─────────────────────────────────────────
         await queryInterface.bulkInsert('purchase_orders', [
             {
                 po_id: PO_1,
                 suppliers_id: SUPPLIER_1,
-                total_cost: 360000.00, // 120 * 3000
+                total_cost: 360000.00,
                 status: 'RECEIVED',
                 createdAt: NOW,
                 updatedAt: NOW,
@@ -210,7 +201,7 @@ module.exports = {
             {
                 po_id: PO_2,
                 suppliers_id: SUPPLIER_2,
-                total_cost: 800000.00, // 200 * 4000
+                total_cost: 800000.00,
                 status: 'PENDING',
                 createdAt: NOW,
                 updatedAt: NOW,
@@ -218,7 +209,11 @@ module.exports = {
             },
         ]);
 
-        // ── 6. purchase_order_items ───────────────────────────────────────
+        // ─────────────────────────────────────────
+        // 5. Purchase Order Items
+        //    Model: poi_id (UUID), po_id (UUID FK), products_id (UUID FK),
+        //           purchase_qty INTEGER, cost DECIMAL(12,2), paranoid
+        // ─────────────────────────────────────────
         await queryInterface.bulkInsert('purchase_order_items', [
             {
                 poi_id: POI_1,
@@ -252,7 +247,14 @@ module.exports = {
             },
         ]);
 
-        // ── 7. stock_logs ─────────────────────────────────────────────────
+        // ─────────────────────────────────────────
+        // 6. Stock Logs
+        //    Model: stock_id (UUID), products_id (UUID FK),
+        //           change_type ENUM('IN','OUT','ADJUST'),
+        //           stock_qty INTEGER,
+        //           reference_type ENUM('SALE','PURCHASE','ADJUST','RETURN'),
+        //           reference_id UUID, paranoid
+        // ─────────────────────────────────────────
         await queryInterface.bulkInsert('stock_logs', [
             {
                 stock_id: STOCK_1,
@@ -260,7 +262,7 @@ module.exports = {
                 change_type: 'IN',
                 stock_qty: 120,
                 reference_type: 'PURCHASE',
-                reference_id: 1,
+                reference_id: PO_1,
                 createdAt: NOW,
                 updatedAt: NOW,
                 deletedAt: null,
@@ -271,7 +273,7 @@ module.exports = {
                 change_type: 'IN',
                 stock_qty: 200,
                 reference_type: 'PURCHASE',
-                reference_id: 2,
+                reference_id: PO_1,
                 createdAt: NOW,
                 updatedAt: NOW,
                 deletedAt: null,
@@ -282,19 +284,25 @@ module.exports = {
                 change_type: 'OUT',
                 stock_qty: 5,
                 reference_type: 'SALE',
-                reference_id: 1,
+                reference_id: TRX_1,
                 createdAt: NOW,
                 updatedAt: NOW,
                 deletedAt: null,
             },
         ]);
 
-        // ── 8. transactions ───────────────────────────────────────────────
+        // ─────────────────────────────────────────
+        // 7. Transactions
+        //    Model: transaction_id (UUID), transaction_code STRING(50) unique,
+        //           total_price DECIMAL(12,2),
+        //           payment_method ENUM('CASH','DEBIT','CREDIT','QRIS'),
+        //           transaction_date DATE, paranoid
+        // ─────────────────────────────────────────
         await queryInterface.bulkInsert('transactions', [
             {
                 transaction_id: TRX_1,
                 transaction_code: 'TRX-20260420-001',
-                total_price: 23000.00, // 5*3000 + 2*4000
+                total_price: 23000.00,
                 payment_method: 'CASH',
                 transaction_date: NOW,
                 createdAt: NOW,
@@ -304,7 +312,7 @@ module.exports = {
             {
                 transaction_id: TRX_2,
                 transaction_code: 'TRX-20260420-002',
-                total_price: 15000.00, // 1*15000
+                total_price: 15000.00,
                 payment_method: 'QRIS',
                 transaction_date: NOW,
                 createdAt: NOW,
@@ -313,7 +321,11 @@ module.exports = {
             },
         ]);
 
-        // ── 9. transaction_items ──────────────────────────────────────────
+        // ─────────────────────────────────────────
+        // 8. Transaction Items
+        //    Model: transaction_item_id (UUID), transaction_id (UUID FK),
+        //           products_id (UUID FK), price DECIMAL(12,2), qty INTEGER, paranoid
+        // ─────────────────────────────────────────
         await queryInterface.bulkInsert('transaction_items', [
             {
                 transaction_item_id: TRX_ITEM_1,
@@ -347,37 +359,72 @@ module.exports = {
             },
         ]);
 
-        // ── 10. ledger ────────────────────────────────────────────────────
+        // ─────────────────────────────────────────
+        // 9. Ledger
+        //    Model: ledger_id (UUID), reference_type ENUM('SALE','PURCHASE'),
+        //           reference_id UUID, debit DECIMAL(15,2), credit DECIMAL(15,2),
+        //           description STRING, paranoid
+        //    Convention: SALE → debit (uang masuk), PURCHASE → credit (uang keluar)
+        // ─────────────────────────────────────────
         await queryInterface.bulkInsert('ledger', [
             {
                 ledger_id: LEDGER_1,
-                transaction_id: TRX_1,
-                po_id: PO_1,
                 reference_type: 'PURCHASE',
-                reference_id: 1,
-                debit: 360000.00,
-                credit: 0.00,
+                reference_id: PO_1,
+                debit: 0.00,
+                credit: 360000.00,
+                description: 'Purchase Order received - PT Indofood Sukses Makmur',
                 createdAt: NOW,
                 updatedAt: NOW,
                 deletedAt: null,
             },
             {
                 ledger_id: LEDGER_2,
-                transaction_id: TRX_1,
-                po_id: PO_1,
                 reference_type: 'SALE',
-                reference_id: 1,
-                debit: 0.00,
-                credit: 23000.00,
+                reference_id: TRX_1,
+                debit: 23000.00,
+                credit: 0.00,
+                description: 'Sale - TRX-20260420-001',
                 createdAt: NOW,
                 updatedAt: NOW,
                 deletedAt: null,
             },
         ]);
+
+        // ─────────────────────────────────────────
+        // 10. Stock Reports
+        //     Model: report_id (UUID), products_id (UUID FK),
+        //            system_stock INTEGER, actual_stock INTEGER,
+        //            difference INTEGER, status STRING default 'PENDING'
+        //            Note: no paranoid (no deletedAt)
+        // ─────────────────────────────────────────
+        await queryInterface.bulkInsert('stock_reports', [
+            {
+                report_id: REPORT_1,
+                products_id: PRODUCT_1,
+                system_stock: 115,   // 120 IN - 5 OUT
+                actual_stock: 113,   // hasil hitung fisik
+                difference: -2,      // actual - system
+                status: 'PENDING',
+                createdAt: NOW,
+                updatedAt: NOW,
+            },
+            {
+                report_id: REPORT_2,
+                products_id: PRODUCT_2,
+                system_stock: 200,
+                actual_stock: 200,
+                difference: 0,
+                status: 'APPROVED',
+                createdAt: NOW,
+                updatedAt: NOW,
+            },
+        ]);
     },
 
-    async down(queryInterface, Sequelize) {
-        // Hapus urutan terbalik (child dulu baru parent)
+    async down(queryInterface) {
+        // Hapus dalam urutan terbalik untuk menghindari FK constraint error
+        await queryInterface.bulkDelete('stock_reports', null, {});
         await queryInterface.bulkDelete('ledger', null, {});
         await queryInterface.bulkDelete('transaction_items', null, {});
         await queryInterface.bulkDelete('transactions', null, {});
@@ -385,8 +432,7 @@ module.exports = {
         await queryInterface.bulkDelete('purchase_order_items', null, {});
         await queryInterface.bulkDelete('purchase_orders', null, {});
         await queryInterface.bulkDelete('Products', null, {});
-        await queryInterface.bulkDelete('customer', null, {});
         await queryInterface.bulkDelete('Users', null, {});
         await queryInterface.bulkDelete('Suppliers', null, {});
-    }
+    },
 };

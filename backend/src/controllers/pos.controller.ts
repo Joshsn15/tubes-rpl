@@ -4,6 +4,7 @@ import { TransactionItems } from "../models/TransactionItems";
 import { Transactions } from "../models/Transactions";
 import { StockLogs } from "../models/StockLogs";
 import { sequelize } from "../../config/database";
+import { Ledger } from "../models/ledger";
 export const checkout = async (req: Request, res: Response) => {
   const t = await sequelize.transaction();
 
@@ -73,13 +74,13 @@ export const checkout = async (req: Request, res: Response) => {
 
   } catch (error: any) {
     console.error("💥 ERROR NAME:", error.name);
-  console.error("💥 ERROR MSG:", error.message);
-  console.error("💥 FULL:", error);
+    console.error("💥 ERROR MSG:", error.message);
+    console.error("💥 FULL:", error);
 
-  await t.rollback();
+    await t.rollback();
 
-  return res.status(400).json({
-    message: error.message || "Checkout failed",
-  });
+    return res.status(400).json({
+      message: error.message || "Checkout failed",
+    });
   }
 };

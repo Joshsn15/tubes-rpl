@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import {
     Box,
@@ -45,115 +46,121 @@ export default function ReceivalBarang() {
             return;
         }
 
-        await fetch("http://localhost:3000/api/stock/receival", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                items: [
-                    {
-                        products_id: selected,
-                        qty: Number(qty)
-                    }
-                ]
-            })
-        });
+        try {
 
-        alert("Stock berhasil ditambahkan!");
-        setQty("");
+            await fetch("http://localhost:3000/api/stock/receival", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    items: [
+                        {
+                            products_id: selected,
+                            qty: Number(qty)
+                        }
+                    ]
+                })
+            });
+
+            alert("Stock berhasil ditambahkan!");
+            setQty("");
+        } catch (err : any) {
+            console.error("ERROR RECEIVAL:", err);
+            alert(err.message || "Gagal menambahkan stock");
+        }
     };
 
-    return (
-        <Box
-            sx={{
-                backgroundColor: "#F4F1E2",
-                minHeight: "100vh",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-start",
-                pt: 10,
-                p: 4
-            }}
-        >
-            <Box sx={{ width: "100%", maxWidth: 850 }}>
+        return (
+            <Box
+                sx={{
+                    backgroundColor: "#F4F1E2",
+                    minHeight: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    pt: 10,
+                    p: 4
+                }}
+            >
+                <Box sx={{ width: "100%", maxWidth: 850 }}>
 
-                <Typography
-                    variant="h4"
-                    sx={{
-                        color: "#513229",
-                        fontWeight: 700,
-                        textAlign: "center",
-                        mb: 3
-                    }}
-                >
-                    Receival Barang
-                </Typography>
-
-                <Card
-                    sx={{
-                        width: "100%",
-                        backgroundColor: "#fff",
-                        borderRadius: 4,
-                        minHeight: 500,
-                        boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
-                        border: "1px solid #E6E0D4",
-                        p: 2,
-                    }}
-                >
-                    <CardContent
+                    <Typography
+                        variant="h4"
                         sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: 6,
-                            p: 4,
-                            pt: 10
+                            color: "#513229",
+                            fontWeight: 700,
+                            textAlign: "center",
+                            mb: 3
                         }}
                     >
-                        <TextField
-                            select
-                            fullWidth
-                            label="Pilih Produk"
-                            value={selected}
-                            onChange={(e) => setSelected(e.target.value)}
-                        >
-                            {products.map((p) => (
-                                <MenuItem key={p.products_id} value={p.products_id}>
-                                    {p.products_name} (Stock: {p.stock})
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                        Receival Barang
+                    </Typography>
 
-                        <TextField
-                            type="number"
-                            label="Jumlah Masuk"
-                            value={qty}
-                            onChange={(e) =>
-                                setQty(e.target.value === "" ? "" : Number(e.target.value))
-                            }
-                        />
-
-                        <Button
-                            variant="contained"
-                            fullWidth
-                            size="large"
-                            onClick={handleSubmit}
-                            disabled={!selected || qty === ""}
+                    <Card
+                        sx={{
+                            width: "100%",
+                            backgroundColor: "#fff",
+                            borderRadius: 4,
+                            minHeight: 500,
+                            boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
+                            border: "1px solid #E6E0D4",
+                            p: 2,
+                        }}
+                    >
+                        <CardContent
                             sx={{
-                                backgroundColor: "#513229",
-                                "&:hover": {
-                                    backgroundColor: "#3b231c"
-                                },
-                                borderRadius: 3,
-                                textTransform: "none",
-                                py: 1.5
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 6,
+                                p: 4,
+                                pt: 10
                             }}
                         >
-                            Simpan Receival
-                        </Button>
-                    </CardContent>
-                </Card>
+                            <TextField
+                                select
+                                fullWidth
+                                label="Pilih Produk"
+                                value={selected}
+                                onChange={(e) => setSelected(e.target.value)}
+                            >
+                                {products.map((p) => (
+                                    <MenuItem key={p.products_id} value={p.products_id}>
+                                        {p.products_name} (Stock: {p.stock})
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+
+                            <TextField
+                                type="number"
+                                label="Jumlah Masuk"
+                                value={qty}
+                                onChange={(e) =>
+                                    setQty(e.target.value === "" ? "" : Number(e.target.value))
+                                }
+                            />
+
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                size="large"
+                                onClick={handleSubmit}
+                                disabled={!selected || qty === ""}
+                                sx={{
+                                    backgroundColor: "#513229",
+                                    "&:hover": {
+                                        backgroundColor: "#3b231c"
+                                    },
+                                    borderRadius: 3,
+                                    textTransform: "none",
+                                    py: 1.5
+                                }}
+                            >
+                                Simpan Receival
+                            </Button>
+                        </CardContent>
+                    </Card>
+                </Box>
             </Box>
-        </Box>
-    );
-}
+        );
+    }

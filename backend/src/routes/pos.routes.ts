@@ -1,4 +1,5 @@
-import { checkout } from "../controllers/pos.controller";
+import { checkout } from "../controllers/pos.controllertest";
+// import { checkout } from "../controllers/pos.controllert";
 
 const Router = require("express").Router();
 

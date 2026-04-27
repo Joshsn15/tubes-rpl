@@ -1,5 +1,6 @@
 import { Table, Column, Model, DataType, PrimaryKey, CreatedAt, UpdatedAt, DeletedAt, BelongsTo } from 'sequelize-typescript';
 import { PurchaseOrders } from './PurchaseOrders';
+import { Products } from './products';
 
 @Table({
     tableName: 'purchase_order_items',
@@ -15,7 +16,7 @@ export class PurchaseOrderItems extends Model {
     })
     declare poi_id: string;
 
-     @Column({
+    @Column({
         type: DataType.UUID,
         allowNull: false
     })
@@ -28,10 +29,16 @@ export class PurchaseOrderItems extends Model {
     declare purchase_qty: number;
 
     @Column({
-        type: DataType.DECIMAL(12,2),
+        type: DataType.DECIMAL(12, 2),
         allowNull: false,
     })
     declare cost: string;
+
+    @Column({
+        type: DataType.UUID,
+        allowNull: false,
+    })
+    declare products_id: string;
 
     @CreatedAt
     declare createdAt: Date;
@@ -44,5 +51,6 @@ export class PurchaseOrderItems extends Model {
 
     @BelongsTo(() => PurchaseOrders, 'po_id')
     declare pos: PurchaseOrders;
-    
+    @BelongsTo(() => Products, 'products_id')
+    declare product: Products;
 }

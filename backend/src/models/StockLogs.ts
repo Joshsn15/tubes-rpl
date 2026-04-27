@@ -17,15 +17,16 @@ export class StockLogs extends Model {
 
     @Column({
         type: DataType.UUID,
+        defaultValue: DataType.UUIDV4,
         allowNull: false
     })
     declare products_id: string;
 
     @Column({
-        type: DataType.ENUM('IN', 'OUT', 'ADJUST'),
+        type: DataType.ENUM('IN', 'OUT', 'ADJUST', 'RETURN', 'MANUAL'),
         allowNull: false,
     })
-    declare change_type: 'IN' | 'OUT' | 'ADJUST';
+    declare change_type: 'IN' | 'OUT' | 'ADJUST' | 'MANUAL';
 
     @Column({
         type: DataType.INTEGER,
@@ -34,14 +35,16 @@ export class StockLogs extends Model {
     declare stock_qty: number;
 
     @Column({
-        type: DataType.ENUM('SALE', 'PURCHASE', 'ADJUST', 'RETURN'),
+        type: DataType.ENUM('SALE', 'PURCHASE', 'ADJUST'),
         allowNull: true,
     })
-    declare reference_type: 'SALE' | 'PURCHASE';
+    declare reference_type: 'SALE' | 'PURCHASE' |'ADJUST';
 
     @Column({
         type: DataType.UUID,
         allowNull: false,
+        // defaultValue: DataType.UUIDV4,
+        // ini dapet dari po_id / transaction_id
     })
     declare reference_id: string;
 

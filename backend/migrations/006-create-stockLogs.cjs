@@ -11,7 +11,7 @@ module.exports = {
                 primaryKey: true,
             },
             change_type: {
-                type: Sequelize.ENUM('IN', 'OUT', 'ADJUST'), 
+                type: Sequelize.ENUM('IN', 'OUT', 'ADJUST', 'RETURN', 'MANUAL'), 
                 allowNull: false,
             },
             stock_qty: {
@@ -19,11 +19,12 @@ module.exports = {
                 allowNull: false,
             },        
             reference_type: { //kl misal reference typenya purchase, berarti stoknya nambah krn dia beli dr supplier
-                type: Sequelize.ENUM('SALE', 'PURCHASE'), 
+                type: Sequelize.ENUM('SALE', 'PURCHASE', 'ADJUST'), 
                 allowNull: false,
             },
             reference_id: {
-                type: Sequelize.INTEGER, 
+                type: Sequelize.UUID,
+                defaultValue: Sequelize.UUIDV4,
                 allowNull: false,
             },
             createdAt: {

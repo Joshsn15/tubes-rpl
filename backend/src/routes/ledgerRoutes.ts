@@ -1,7 +1,8 @@
-import { ledgerController } from "../controllers/ledgerController";
+import { LedgerController } from "../controllers/ledgerController";
+
 const Router = require("express").Router();
 
 // GET /api/ledger
-Router.get("/", ledgerController.getLedger);
-Router.post("/add-ledger", ledgerController.createLedger);
+Router.get("/", LedgerController.getLedger);
+Router.post("/add-ledger", LedgerController.createLedger);
 export default Router;

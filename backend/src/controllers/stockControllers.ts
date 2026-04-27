@@ -4,6 +4,9 @@ import { StockLogs } from '../models/StockLogs';
 import { sequelize } from "../../config/database";
 import { Ledger } from '../models/ledger';
 import { StockReports } from '../models/StockReports';
+import { UUIDV4 } from 'sequelize';
+import { randomUUID } from 'node:crypto';
+// import { UUIDV4 } from 'sequelize';
 
 export class stockControllers {
     static async getStock(req: Request, res: Response) {
@@ -19,7 +22,7 @@ export class stockControllers {
             res.status(500).json({ message: "Error fetching stock" });
         }
     }
-    
+
 
     static async getReports(req: Request, res: Response) {
         try {
@@ -76,59 +79,50 @@ export class stockControllers {
 
     static async receival(req: Request, res: Response) {
         const t = await sequelize.transaction();
-
         try {
-            const { items } = req.body;
+            const {  items } = req.body;
+             const po_id = req.body.po_id || randomUUID();
+            if (!po_id) throw new Error("PO ID is required");
+            if (!items || items.length === 0) throw new Error("Items is required");
+
+            let totalCost = 0;
 
             for (const item of items) {
-                console.log("ITEM:", item);
+                const product = await Products.findByPk(item.products_id, { transaction: t });
+                if (!product) throw new Error(`Product not found: ${item.products_id}`);
 
-                const product = await Products.findByPk(item.products_id);
-
-                if (!product) throw new Error("Product not found");
-
-                console.log("PRODUCT:", product.toJSON());
-
-                const currentStock = Number(product.getDataValue("stock") || 0);
                 const qty = Number(item.qty || 0);
                 const price = Number(product.getDataValue("price") || 0);
 
-                product.setDataValue("stock", currentStock + qty);
+                product.setDataValue("stock", Number(product.getDataValue("stock") || 0) + qty);
                 await product.save({ transaction: t });
-
-                console.log("STOCK UPDATED");
 
                 await StockLogs.create({
                     products_id: item.products_id,
                     change_type: "IN",
                     stock_qty: qty,
                     reference_type: "PURCHASE",
-                    reference_id: 1 // sementara
+                    reference_id: po_id,
                 }, { transaction: t });
 
-                console.log("STOCK LOG CREATED");
-
-                // ❗ sementara MATIIN ledger dulu
-                // biar kita tau errornya dari mana
-                /*
-                await Ledger.create({
-                  reference_type: "PURCHASE",
-                  reference_id: 1,
-                  debit: qty * price,
-                  credit: 0
-                }, { transaction: t });
-                */
-
-                console.log("DONE ITEM");
+                totalCost += qty * price;
             }
 
-            await t.commit();
+            // create ledger entry setelah loop
+            await Ledger.create({
+                reference_type: "PURCHASE",
+                reference_id: po_id,
+                debit: 0,
+                credit: totalCost,
+                description: `Purchase received - PO ${po_id}`,
+            }, { transaction: t });
 
+            await t.commit();
             res.json({ success: true });
 
         } catch (error: any) {
-            console.error("RECEIVAL ERROR FULL:", error);
             await t.rollback();
+            console.error("RECEIVAL ERROR:", error);
             res.status(500).json({ message: error.message });
         }
     }
@@ -159,7 +153,6 @@ export class stockControllers {
 
         try {
             const { report_id } = req.body;
-
             const report = await StockReports.findByPk(report_id);
             if (!report) throw new Error("Report not found");
 
@@ -167,26 +160,18 @@ export class stockControllers {
             if (!product) throw new Error("Product not found");
 
             const diff = report.difference;
-
             product.stock += diff;
             await product.save({ transaction: t });
 
             await StockLogs.create({
                 products_id: report.products_id,
                 change_type: "ADJUST",
-                stock_qty: diff,
-                reference_type: "MANUAL"
+                stock_qty: Math.abs(diff),
+                reference_type: "ADJUST", // ADJUST karena ini perubahan stock yang terjadi bukan karena transaksi keuangan, jadi reference typenya ADJUST aja        
+                reference_id: report.report_id,
             }, { transaction: t });
 
-            // ini gatau ledger dipake ga
-            // if (diff < 0) {
-            //     await Ledger.create({
-            //         reference_type: "ADJUST",
-            //         reference_id: report.products_id,
-            //         debit: 0,
-            //         credit: Math.abs(diff) * product.price
-            //     }, { transaction: t });
-            // }
+            // ADJUST GA MASUK DI LEDGER KARENA BUKAN TRANSAKSI KEUANGAN, CUMA PERUBAHAN STOCK
 
             report.status = "APPROVED";
             await report.save({ transaction: t });
