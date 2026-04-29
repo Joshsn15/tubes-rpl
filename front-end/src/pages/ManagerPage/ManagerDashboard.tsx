@@ -81,7 +81,7 @@ export default function ManagerDashboard() {
     };
 
     fetchData();
-  }, []); // blm ada dependency, krn mau fetch sekali aja pas load page
+  }, [user]); // blm ada dependency, krn mau fetch sekali aja pas load page
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase();

@@ -24,7 +24,7 @@ export default function ReceivalBarang() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:3000/api/stock");
+                const res = await fetch("http://localhost:30050/api/stock");
                 const data = await res.json();
                 setProducts(data.data);
             } catch (err) {
@@ -48,7 +48,7 @@ export default function ReceivalBarang() {
 
         try {
 
-            await fetch("http://localhost:3000/api/stock/receival", {
+            await fetch("http://localhost:30050/api/stock/receival", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -33,7 +33,7 @@ export default function StockReportsPage() {
   const [correctedActual, setCorrectedActual] = useState<string>("");
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/stock/reports")
+    fetch("http://localhost:30050/api/stock/reports")
       .then((r) => r.json())
       .then((d) => setReports(d.data));
   }, []);
@@ -57,14 +57,14 @@ export default function StockReportsPage() {
     if (!selected) return;
 
     if (correctedActual !== "") {
-      await fetch(`http://localhost:3000/api/stock/reports/${selected.report_id}`, {
+      await fetch(`http://localhost:30050/api/stock/reports/${selected.report_id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ actual_stock: Number(correctedActual) }),
       });
     }
 
-    await fetch("http://localhost:3000/api/stock/approve", {
+    await fetch("http://localhost:30050/api/stock/approve", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ report_id: selected.report_id }),

@@ -26,7 +26,7 @@ export default function StockPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/stock");
+        const res = await fetch("http://localhost:30050/api/stock");
         const data = await res.json();
         setProducts(data.data);
         console.log(data.data)

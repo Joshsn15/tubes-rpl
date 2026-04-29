@@ -47,8 +47,8 @@ export default function EmployeeForm({ open, onClose, onSuccess, data }: any) {
 
         const method = data ? "PUT" : "POST";
         const url = data
-            ? `http://localhost:3000/api/admin/employees/${data.user_id}`
-            : `http://localhost:3000/api/admin/employees`;
+            ? `http://localhost:30050/api/admin/employees/${data.user_id}`
+            : `http://localhost:30050/api/admin/employees`;
 
         try {
             const res = await fetch(url, {

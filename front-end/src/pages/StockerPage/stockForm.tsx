@@ -36,13 +36,13 @@ function StockForm() {
   const [actualStock, setActualStock] = useState<number | "">("");
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/stock")
+    fetch("http://localhost:30050/api/stock")
       .then(res => res.json())
       .then(data => setProducts(data.data));
   }, []);
 
   const fetchReports = () => {
-    fetch("http://localhost:3000/api/stock/reports")
+    fetch("http://localhost:30050/api/stock/reports")
       .then(res => res.json())
       .then(data => setReports(data.data));
   };
@@ -62,7 +62,7 @@ function StockForm() {
       return;
     }
 
-    await fetch("http://localhost:3000/api/stock/create", {
+    await fetch("http://localhost:30050/api/stock/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -78,7 +78,7 @@ function StockForm() {
 
   // ini yg josh deh
   // const handleApprove = async (id: string) => {
-  //   await fetch("http://localhost:3000/api/stock/approve-report", {
+  //   await fetch("http://localhost:30050/api/stock/approve-report", {
   //     method: "POST",
   //     headers: {
   //       "Content-Type": "application/json"

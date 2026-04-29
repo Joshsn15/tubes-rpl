@@ -2,7 +2,7 @@ import type { CartItem, Product } from "../types/pos";
 
 // 🧾 get products
 export const getProducts = async () => {
-    const res = await fetch(`http://localhost:3000/api/products`);
+    const res = await fetch(`http://localhost:30050/api/products`);
 
     if (!res.ok) throw new Error("Failed to fetch products");
 
@@ -10,21 +10,21 @@ export const getProducts = async () => {
 };
 
 export const getStock = async () => {
-    const res = await fetch(`http://localhost:3000/api/stock`);
+    const res = await fetch(`http://localhost:30050/api/stock`);
     if (!res.ok) throw new Error("Failed to fetch stock");
 
     return res.json();
 };
 
 export const getProduct = async (id: string) => {
-    const res = await fetch(`http://localhost:3000/api/products/${id}`);
+    const res = await fetch(`http://localhost:30050/api/products/${id}`);
     if (!res.ok) throw new Error("Failed to fetch product");
 
     return res.json();
 };
 
 export const addProduct = async (data: Product) => {
-    const res = await fetch(`http://localhost:3000/api/products/add-product`, {
+    const res = await fetch(`http://localhost:30050/api/products/add-product`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export const addProduct = async (data: Product) => {
 }
 
 export const updateProduct = async (id: string, data: Partial<Product>) => {
-    const res = await fetch(`http://localhost:3000/api/products/${id}`, {
+    const res = await fetch(`http://localhost:30050/api/products/${id}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export const checkout = async (
     paymentMethod: string
 ) => {
     const res = await fetch(
-        `http://localhost:3000/api/checkout`,
+        `http://localhost:30050/api/checkout`,
         {
             method: "POST",
             headers: {
@@ -90,7 +90,7 @@ export const updateProductPrice = async (
     price: number,
     token: string
 ) => {
-    const res = await fetch(`http://localhost:3000/api/products/update-price/${id}`, {
+    const res = await fetch(`http://localhost:30050/api/products/update-price/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -113,7 +113,7 @@ export const getLedgerFromToWhere = async (startDate?: string, endDate?: string)
     if (startDate) params.append("startDate", startDate);
     if (endDate) params.append("endDate", endDate);
 
-    const res = await fetch(`http://localhost:3000/api/ledger?${params}`);
+    const res = await fetch(`http://localhost:30050/api/ledger?${params}`);
     if (!res.ok) throw new Error("Failed to fetch ledger");
     return res.json();
 };

@@ -41,8 +41,8 @@ sequelize.authenticate()
     app.use("/api/ledger",ledgerRoute);
     app.use("/api/admin",adminRoute);
     app.use("/api", posRoutes);
-    app.listen(3000, () => {
-      console.log("Server running on port 3000");
+    app.listen(5000, () => {
+      console.log("Server running on port 5000");
     });
   })
   .catch((err) => {

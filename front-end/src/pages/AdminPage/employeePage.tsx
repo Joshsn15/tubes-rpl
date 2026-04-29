@@ -26,7 +26,7 @@ export default function EmployeePage() {
     const [selected, setSelected] = useState<Employee | null>(null);
 
     const fetchData = () => {
-        fetch("http://localhost:3000/api/admin/employees")
+        fetch("http://localhost:30050/api/admin/employees")
             .then(res => res.json())
             .then(res => {
                 console.log("API:", res);
@@ -40,7 +40,7 @@ export default function EmployeePage() {
     }, []);
 
     const handleDelete = async (id: string) => {
-        await fetch(`http://localhost:3000/api/admin/employees/${id}`, {
+        await fetch(`http://localhost:30050/api/admin/employees/${id}`, {
             method: "DELETE"
         });
         fetchData();
